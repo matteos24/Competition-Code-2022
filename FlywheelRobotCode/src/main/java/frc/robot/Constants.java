@@ -104,6 +104,10 @@ public final class Constants {
   public static final int RIGHT_TRIGGER_AXIS = 3;
 
   // Buttons (for xbox controller)
+
+  public static final int RIGHT_BUMPER = 6;
+
+  /**
   public static final int BUTTON_A = 1;
   public static final int BUTTON_B = 2;
   public static final int BUTTON_X = 3;
@@ -114,6 +118,8 @@ public final class Constants {
   public static final int START_BUTTON = 8;
   public static final int LEFT_STICK_BUTTON = 9;
   public static final int RIGHT_STICK_BUTTON = 10;
+
+  */
 
   /**
 
