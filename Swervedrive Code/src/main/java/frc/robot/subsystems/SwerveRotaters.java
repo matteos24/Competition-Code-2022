@@ -90,7 +90,6 @@ public class SwerveRotaters extends SubsystemBase {
 
   //This function is the default function for this subsystem, it rotates each individual wheel to its wanted allignment.
   public void rotateMotors(double horizontal, double vertical){
-
     vertical *= -1;   
     double goal = angle(horizontal, vertical);
     //code
@@ -99,7 +98,7 @@ public class SwerveRotaters extends SubsystemBase {
     boolean r3Finished = getAngle(encoder3) < goal - 2 && getAngle(encoder3) > goal + 2;
     boolean r4Finished = getAngle(encoder4) < goal - 2 && getAngle(encoder4) > goal + 2;
 
-    if (!(r1Finished && r2Finished && r3Finished && r4Finished && Math.abs(horizontal)>=0.05 && Math.abs(vertical)>=0.05)){
+    if (!(r1Finished && r2Finished && r3Finished && r4Finished && Math.abs(horizontal)>=CONTROLLER_SENSITIVITY && Math.abs(vertical)>=CONTROLLER_SENSITIVITY)){
       encoder1.set(ControlMode.PercentOutput, getRotationDirection(encoder1, goal)*TURN_POWER);
       encoder2.set(ControlMode.PercentOutput, getRotationDirection(encoder2, goal)*TURN_POWER);
       encoder3.set(ControlMode.PercentOutput, getRotationDirection(encoder3, goal)*TURN_POWER);

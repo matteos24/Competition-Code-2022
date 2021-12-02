@@ -44,7 +44,7 @@ public class SwerveSpinners extends SubsystemBase {
   public void spinMotors(double horizontal, double vertical, double [] currentAngles){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    if (horizontal>= 0.05 && vertical >= 0.05){
+    if (horizontal>= CONTROLLER_SENSITIVITY && vertical >= CONTROLLER_SENSITIVITY){
       double trueSpinSpeed = (((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2)))*MOTOR_POWER);
       motor1.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[0])));
       motor2.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[1])));
