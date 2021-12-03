@@ -27,9 +27,10 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double MM_TO_IN = 0.0393701;
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
   public static final double WHEE7L_DIAMETER_INCHES = 4;
-  public static final double MOTOR_POWER = 0.45;
+  public static final double MOTOR_POWER = 0.5;
 
   private WPI_TalonFX motor1, motor2, motor3, motor4;
+  private SpeedControllerGroup amogus;
   
   //This is the constructor for this subsytem.
   public SwerveSpinners() {
@@ -37,6 +38,7 @@ public class SwerveSpinners extends SubsystemBase {
     motor2 = new WPI_TalonFX(MOTOR_PORT_2);
     motor3 = new WPI_TalonFX(MOTOR_PORT_3);
     motor4 = new WPI_TalonFX(MOTOR_PORT_4);
+    amogus = new SpeedControllerGroup(motor1, motor2, motor3, motor4);
   }
 
 
@@ -44,12 +46,9 @@ public class SwerveSpinners extends SubsystemBase {
   public void spinMotors(double horizontal, double vertical, double [] currentAngles){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    if (horizontal>= CONTROLLER_SENSITIVITY && vertical >= CONTROLLER_SENSITIVITY){
-      double trueSpinSpeed = (((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2)))*MOTOR_POWER);
-      motor1.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[0])));
-      motor2.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[1])));
-      motor3.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[2])));
-      motor4.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[3])));
+    if (Math.abs(horizontal)>= CONTROLLER_SENSITIVITY && Math.abs(vertical) >= CONTROLLER_SENSITIVITY){
+      double trueSpinSpeed = ((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2))*MOTOR_POWER);
+      amogus.set(trueSpinSpeed*(getSpinDirection(vertical)));
     }
   }
 
@@ -57,7 +56,7 @@ public class SwerveSpinners extends SubsystemBase {
    * This function is for getting the direction for the spin of a wheel. The current angles are useless right now.
    * However, it may be of a use if my thinking is wrong, so I did not erase it. 
   */
-  private double getSpinDirection(double vertical, double currentAngle){
+  private double getSpinDirection(double vertical){
     if (vertical >= 0) return 1;
     else return -1;
   }

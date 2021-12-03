@@ -91,26 +91,25 @@ public class SwerveRotaters extends SubsystemBase {
   //This function is the default function for this subsystem, it rotates each individual wheel to its wanted allignment.
   public void rotateMotors(double horizontal, double vertical){ 
     vertical *= -1;   
-    System.out.println(horizontal);
-    System.out.println(vertical);
     double goal = angle(horizontal, vertical);
     double goalM = goal%180;
     //code
-    boolean r1Finished = getAngle(encoder1) < goal - 2 && getAngle(encoder1) > goal + 2;
-    boolean r2Finished = getAngle(encoder2) < goal - 2 && getAngle(encoder2) > goal + 2;
-    boolean r3Finished = getAngle(encoder3) < goal - 2 && getAngle(encoder3) > goal + 2;
-    boolean r4Finished = getAngle(encoder4) < goal - 2 && getAngle(encoder4) > goal + 2;
-
-    if (!(r1Finished && r2Finished && r3Finished && r4Finished && Math.abs(horizontal)>=CONTROLLER_SENSITIVITY && Math.abs(vertical)>=CONTROLLER_SENSITIVITY)){
-      encoder1.set(ControlMode.PercentOutput, getRotationDirection(encoder1, goalM)*TURN_POWER);
-      encoder2.set(ControlMode.PercentOutput, getRotationDirection(encoder2, goalM)*TURN_POWER);
-      encoder3.set(ControlMode.PercentOutput, getRotationDirection(encoder3, goalM)*TURN_POWER);
-      encoder4.set(ControlMode.PercentOutput, getRotationDirection(encoder4, goalM)*TURN_POWER);
-      
-      r1Finished = getAngle(encoder1) < goal - 2 && getAngle(encoder1) > goal + 2;
-      r2Finished = getAngle(encoder2) < goal - 2 && getAngle(encoder2) > goal + 2;
-      r3Finished = getAngle(encoder3) < goal - 2 && getAngle(encoder3) > goal + 2;
-      r4Finished = getAngle(encoder4) < goal - 2 && getAngle(encoder4) > goal + 2;
+    boolean r1Finished = ((getAngle(encoder1) > (goal - ANGLE_RANGE)) && (getAngle(encoder1) < (goal + ANGLE_RANGE)));
+    boolean r2Finished = ((getAngle(encoder2) > (goal - ANGLE_RANGE)) && (getAngle(encoder2) < (goal + ANGLE_RANGE)));
+    boolean r3Finished = ((getAngle(encoder3) > (goal - ANGLE_RANGE)) && (getAngle(encoder3) < (goal + ANGLE_RANGE)));
+    boolean r4Finished = ((getAngle(encoder4) > (goal - ANGLE_RANGE)) && (getAngle(encoder4) < (goal + ANGLE_RANGE)));
+    if ((Math.abs(vertical)>= CONTROLLER_SENSITIVITY) && (Math.abs(horizontal)>= CONTROLLER_SENSITIVITY)){
+      if (!(r1Finished && r2Finished && r3Finished && r4Finished)){
+        encoder1.set(ControlMode.PercentOutput, getRotationDirection(encoder1, goalM)*TURN_POWER);
+        encoder2.set(ControlMode.PercentOutput, getRotationDirection(encoder2, goalM)*TURN_POWER);
+        encoder3.set(ControlMode.PercentOutput, getRotationDirection(encoder3, goalM)*TURN_POWER);
+        encoder4.set(ControlMode.PercentOutput, getRotationDirection(encoder4, goalM)*TURN_POWER);
+        
+        r1Finished = ((getAngle(encoder1) > (goal - ANGLE_RANGE)) && (getAngle(encoder1) < (goal + ANGLE_RANGE)));
+        r2Finished = ((getAngle(encoder2) > (goal - ANGLE_RANGE)) && (getAngle(encoder2) < (goal + ANGLE_RANGE)));
+        r3Finished = ((getAngle(encoder3) > (goal - ANGLE_RANGE)) && (getAngle(encoder3) < (goal + ANGLE_RANGE)));
+        r4Finished = ((getAngle(encoder4) > (goal - ANGLE_RANGE)) && (getAngle(encoder4) < (goal + ANGLE_RANGE)));
+      }
     }
   }
 
