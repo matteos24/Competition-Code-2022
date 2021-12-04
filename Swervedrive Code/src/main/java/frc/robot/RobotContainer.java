@@ -50,12 +50,10 @@ public class RobotContainer {
         () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), SWERVEROTATERS.getCurrentAngles()),
         SWERVESPINNERS
     ));
-    /**
     SWERVEROTATERS.setDefaultCommand(
       new RunCommand(
         () -> SWERVEROTATERS.rotateMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS)),
         SWERVEROTATERS
     ));
-    */
   }
 }

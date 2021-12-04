@@ -33,9 +33,9 @@ public final class Constants {
     //Controller Constants
     //For swerve
     public static final int CONTROLLER_0 = 0;
-    public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 2;
-    public static final int TRANSLATIONAL_VERTICAL_AXIS = 3;
-    public static final double CONTROLLER_SENSITIVITY = 0;
+    public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 4;
+    public static final int TRANSLATIONAL_VERTICAL_AXIS = 5;
+    public static final double CONTROLLER_SENSITIVITY = 0.1;
     public static final double ANGLE_RANGE = 2;
 
 }

@@ -9,6 +9,7 @@ import static frc.robot.Constants.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveRotaters extends SubsystemBase {
@@ -16,7 +17,7 @@ public class SwerveRotaters extends SubsystemBase {
   private TalonFX encoder1, encoder2, encoder3, encoder4;
   public TalonFX[] turnWheels = new TalonFX[4];
   public final double ENCODER_PULSES_PER_ROTATION = 256;
-  public final double TURN_POWER = 0.2;
+  public final double TURN_POWER = 0.1;
   //This is the constructor where the rotater motors are created (named encoders) and are reset.
   public SwerveRotaters() {
     encoder1 = new TalonFX(ROTATOR_PORT_1);
@@ -98,21 +99,20 @@ public class SwerveRotaters extends SubsystemBase {
     boolean r2Finished = ((getAngle(encoder2) > (goal - ANGLE_RANGE)) && (getAngle(encoder2) < (goal + ANGLE_RANGE)));
     boolean r3Finished = ((getAngle(encoder3) > (goal - ANGLE_RANGE)) && (getAngle(encoder3) < (goal + ANGLE_RANGE)));
     boolean r4Finished = ((getAngle(encoder4) > (goal - ANGLE_RANGE)) && (getAngle(encoder4) < (goal + ANGLE_RANGE)));
-    if ((Math.abs(vertical)>= CONTROLLER_SENSITIVITY) && (Math.abs(horizontal)>= CONTROLLER_SENSITIVITY)){
-      if (!(r1Finished && r2Finished && r3Finished && r4Finished)){
-        encoder1.set(ControlMode.PercentOutput, getRotationDirection(encoder1, goalM)*TURN_POWER);
-        encoder2.set(ControlMode.PercentOutput, getRotationDirection(encoder2, goalM)*TURN_POWER);
-        encoder3.set(ControlMode.PercentOutput, getRotationDirection(encoder3, goalM)*TURN_POWER);
-        encoder4.set(ControlMode.PercentOutput, getRotationDirection(encoder4, goalM)*TURN_POWER);
-        
-        r1Finished = ((getAngle(encoder1) > (goal - ANGLE_RANGE)) && (getAngle(encoder1) < (goal + ANGLE_RANGE)));
-        r2Finished = ((getAngle(encoder2) > (goal - ANGLE_RANGE)) && (getAngle(encoder2) < (goal + ANGLE_RANGE)));
-        r3Finished = ((getAngle(encoder3) > (goal - ANGLE_RANGE)) && (getAngle(encoder3) < (goal + ANGLE_RANGE)));
-        r4Finished = ((getAngle(encoder4) > (goal - ANGLE_RANGE)) && (getAngle(encoder4) < (goal + ANGLE_RANGE)));
-      }
+    if ((Math.pow(vertical, 2) + Math.pow(horizontal, 2))>= CONTROLLER_SENSITIVITY){
+      if (!(r1Finished)) encoder1.set(ControlMode.PercentOutput, getRotationDirection(encoder1, goalM)*TURN_POWER);
+      if (!(r2Finished)) encoder2.set(ControlMode.PercentOutput, getRotationDirection(encoder2, goalM)*TURN_POWER);
+      if (!(r3Finished)) encoder3.set(ControlMode.PercentOutput, getRotationDirection(encoder3, goalM)*TURN_POWER);
+      if (!(r4Finished)) encoder4.set(ControlMode.PercentOutput, getRotationDirection(encoder4, goalM)*TURN_POWER);
+    }
+    else{
+      encoder1.set(ControlMode.PercentOutput, 0);
+      encoder2.set(ControlMode.PercentOutput, 0);
+      encoder3.set(ControlMode.PercentOutput, 0);
+      encoder4.set(ControlMode.PercentOutput, 0);
     }
   }
-
+  
   //These 4 functions provide the angles that the 4 encoders within the subsytem are pointing at.
   public double getCurrentAngleE1(){
     return getAngle(encoder1);
