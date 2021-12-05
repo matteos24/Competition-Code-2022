@@ -30,7 +30,7 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double MOTOR_POWER = 0.5;
 
   private WPI_TalonFX motor1, motor2, motor3, motor4;
-  private SpeedControllerGroup amogus;
+  private SpeedControllerGroup die_emre;
   
   //This is the constructor for this subsytem.
   public SwerveSpinners() {
@@ -38,7 +38,7 @@ public class SwerveSpinners extends SubsystemBase {
     motor2 = new WPI_TalonFX(MOTOR_PORT_2);
     motor3 = new WPI_TalonFX(MOTOR_PORT_3);
     motor4 = new WPI_TalonFX(MOTOR_PORT_4);
-    amogus = new SpeedControllerGroup(motor1, motor2, motor3, motor4);
+    die_emre = new SpeedControllerGroup(motor1, motor2, motor3, motor4);
   }
 
 
@@ -46,9 +46,12 @@ public class SwerveSpinners extends SubsystemBase {
   public void spinMotors(double horizontal, double vertical, double [] currentAngles){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    if (Math.abs(horizontal)>= CONTROLLER_SENSITIVITY && Math.abs(vertical) >= CONTROLLER_SENSITIVITY){
+    if ((Math.pow(vertical, 2) + Math.pow(horizontal, 2)) >= CONTROLLER_SENSITIVITY){
       double trueSpinSpeed = ((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2))*MOTOR_POWER);
-      amogus.set(trueSpinSpeed*(getSpinDirection(vertical)));
+      die_emre.set(trueSpinSpeed*(getSpinDirection(vertical)));
+    }
+    else{
+      die_emre.set(0);
     }
   }
 
@@ -57,8 +60,7 @@ public class SwerveSpinners extends SubsystemBase {
    * However, it may be of a use if my thinking is wrong, so I did not erase it. 
   */
   private double getSpinDirection(double vertical){
-    if (vertical >= 0) return 1;
-    else return -1;
+    return 1;
   }
 
   @Override

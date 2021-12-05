@@ -37,5 +37,6 @@ public final class Constants {
     public static final int TRANSLATIONAL_VERTICAL_AXIS = 5;
     public static final double CONTROLLER_SENSITIVITY = 0.1;
     public static final double ANGLE_RANGE = 2;
-
+    public static final double P_CONSTANT = 1.0/360.0;
+    public static final double GEAR_RATIO = 14;
 }
