@@ -47,7 +47,7 @@ public class RobotContainer {
     /*
     SWERVESPINNERS.setDefaultCommand(
       new RunCommand(
-        () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), SWERVEROTATERS.getCurrentAngles()),
+        () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS)),
         SWERVESPINNERS
     ));
     */

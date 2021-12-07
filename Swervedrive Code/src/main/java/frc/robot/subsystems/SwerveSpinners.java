@@ -35,6 +35,7 @@ public class SwerveSpinners extends SubsystemBase {
   //This is the constructor for this subsytem.
   public SwerveSpinners() {
     motor1 = new WPI_TalonFX(MOTOR_PORT_1);
+    
     motor2 = new WPI_TalonFX(MOTOR_PORT_2);
     motor3 = new WPI_TalonFX(MOTOR_PORT_3);
     motor4 = new WPI_TalonFX(MOTOR_PORT_4);
@@ -43,7 +44,7 @@ public class SwerveSpinners extends SubsystemBase {
 
 
   //This function is the default command for the swervedrive motor spinners.
-  public void spinMotors(double horizontal, double vertical, double [] currentAngles){
+  public void spinMotors(double horizontal, double vertical){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
     if ((Math.pow(vertical, 2) + Math.pow(horizontal, 2)) >= CONTROLLER_SENSITIVITY){

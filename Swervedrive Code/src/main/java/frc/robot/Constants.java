@@ -31,12 +31,35 @@ public final class Constants {
     //Done
 
     //Controller Constants
-    //For swerve
     public static final int CONTROLLER_0 = 0;
-    public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 4;
-    public static final int TRANSLATIONAL_VERTICAL_AXIS = 5;
+    public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 2;
+    public static final int TRANSLATIONAL_VERTICAL_AXIS = 3;
+
+    // SwerveDrive Constants
     public static final double CONTROLLER_SENSITIVITY = 0.1;
     public static final double ANGLE_RANGE = 2;
     public static final double P_CONSTANT = 1.0/360.0;
-    public static final double GEAR_RATIO = 14;
+    public static final double GEAR_RATIO = 12.8;
+    public static final double UNITS_PER_ROTATION = 2048;
+
+
+    public static final int kSlotIdx = 0;
+
+	/**
+	 * Talon FX supports multiple (cascaded) PID loops. For
+	 * now we just want the primary one.
+	 */
+	public static final int kPIDLoopIdx = 0;
+
+	/**
+	 * set to zero to skip waiting for confirmation, set to nonzero to wait and
+	 * report to DS if action fails.
+	 */
+    public static final int kTimeoutMs = 30;
+
+	/**
+	 * Gains used in Motion Magic, to be adjusted accordingly
+     * Gains(kp, ki, kd, kf, izone, peak output);
+     */
+    public static final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.2, 0, 1.0);
 }
