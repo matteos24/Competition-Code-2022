@@ -32,8 +32,9 @@ public final class Constants {
 
     //Controller Constants
     public static final int CONTROLLER_0 = 0;
-    public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 2;
-    public static final int TRANSLATIONAL_VERTICAL_AXIS = 3;
+    public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 0;
+    public static final int TRANSLATIONAL_VERTICAL_AXIS = 1;
+    public static final int ROTATIONAL_HORIZONTAL_AXIS = 2;
 
     // SwerveDrive Constants
     public static final double CONTROLLER_SENSITIVITY = 0.1;
@@ -41,6 +42,8 @@ public final class Constants {
     public static final double P_CONSTANT = 1.0/360.0;
     public static final double GEAR_RATIO = 12.8;
     public static final double UNITS_PER_ROTATION = 2048;
+    public static final double L = 1;
+    public static final double W = 1;
 
 
     public static final int kSlotIdx = 0;
@@ -61,5 +64,5 @@ public final class Constants {
 	 * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    public static final Gains kGains = new Gains(0.2, 0.0, 0.0, 0.2, 0, 1.0);
+    public static final Gains kGains = new Gains(1.0, 0.0, 0.0, 0.0, 0, 1.0);
 }

@@ -8,41 +8,60 @@ import static frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveRotaters3 extends SubsystemBase {
   /** These are the variables that are created for this subsytem.. */
   private TalonFX encoder1, encoder2, encoder3, encoder4;
-  public final double ENCODER_PULSES_PER_ROTATION = 256;
-  public final double TURN_POWER = 0.3;
+  public final double ENCODER_PULSES_PER_ROTATION = 2048;
+  //Configure the turn power into the control mode pid somehow, I think there is a method for RPM or something -> check pls:)
+  public final double TURN_POWER = 0.25;
   //This is the constructor where the rotater motors are created (named encoders) and are reset.
   public SwerveRotaters3() {
     encoder1 = new TalonFX(ROTATOR_PORT_1);
     encoder2 = new TalonFX(ROTATOR_PORT_2);
     encoder3 = new TalonFX(ROTATOR_PORT_3);
     encoder4 = new TalonFX(ROTATOR_PORT_4);
+    encoder1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    encoder2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    encoder3.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    encoder4.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     resetEncoders();
-    encoder1.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
-		encoder1.config_kF(kSlotIdx, kGains.kF, kTimeoutMs);
-		encoder1.config_kP(kSlotIdx, kGains.kP, kTimeoutMs);
-		encoder1.config_kI(kSlotIdx, kGains.kI, kTimeoutMs);
-    encoder1.config_kD(kSlotIdx, kGains.kD, kTimeoutMs);
-    encoder2.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
-		encoder2.config_kF(kSlotIdx, kGains.kF, kTimeoutMs);
-		encoder2.config_kP(kSlotIdx, kGains.kP, kTimeoutMs);
-		encoder2.config_kI(kSlotIdx, kGains.kI, kTimeoutMs);
-    encoder2.config_kD(kSlotIdx, kGains.kD, kTimeoutMs);
-    encoder3.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
-		encoder3.config_kF(kSlotIdx, kGains.kF, kTimeoutMs);
-		encoder3.config_kP(kSlotIdx, kGains.kP, kTimeoutMs);
-		encoder3.config_kI(kSlotIdx, kGains.kI, kTimeoutMs);
-    encoder3.config_kD(kSlotIdx, kGains.kD, kTimeoutMs);
-    encoder4.selectProfileSlot(kSlotIdx, kPIDLoopIdx);
-		encoder4.config_kF(kSlotIdx, kGains.kF, kTimeoutMs);
-		encoder4.config_kP(kSlotIdx, kGains.kP, kTimeoutMs);
-		encoder4.config_kI(kSlotIdx, kGains.kI, kTimeoutMs);
-		encoder4.config_kD(kSlotIdx, kGains.kD, kTimeoutMs);
+
+    encoder1.configFactoryDefault();
+    encoder1.set(ControlMode.Velocity,0);
+    encoder1.config_kP(0, kGains.kP);
+    encoder1.config_kI(0, kGains.kI);
+    encoder1.config_kD(0, kGains.kD);
+    encoder1.config_kF(0, kGains.kF); 
+    encoder1.setSensorPhase(true);
+
+    encoder2.configFactoryDefault();
+    encoder2.set(ControlMode.Velocity,0);
+    encoder2.config_kP(0, kGains.kP);
+    encoder2.config_kI(0, kGains.kI);
+    encoder2.config_kD(0, kGains.kD);
+    encoder2.config_kF(0, kGains.kF); 
+    encoder2.setSensorPhase(true);
+
+    encoder3.configFactoryDefault();
+    encoder3.set(ControlMode.Velocity,0);
+    encoder3.config_kP(0, kGains.kP);
+    encoder3.config_kI(0, kGains.kI);
+    encoder3.config_kD(0, kGains.kD);
+    encoder3.config_kF(0, kGains.kF); 
+    encoder3.setSensorPhase(true);
+    
+    encoder4.configFactoryDefault();
+    encoder4.set(ControlMode.Velocity,0);
+    encoder4.config_kP(0, kGains.kP);
+    encoder4.config_kI(0, kGains.kI);
+    encoder4.config_kD(0, kGains.kD);
+    encoder4.config_kF(0, kGains.kF); 
+    encoder4.setSensorPhase(true);
+    
   }
   //This function resets the encoders when the subsytem is initialized
   public void resetEncoders(){
@@ -59,8 +78,8 @@ public class SwerveRotaters3 extends SubsystemBase {
   }
 
   //This function gives the current angle that the provided encoder is pointing.
-  public double angleToPulse(double angle){
-    return angle*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360;
+  public double angleToPulse(double horizontal, double vertical){
+    return angle(horizontal, vertical)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360;
   }
 
   // This function provides the goal angle that is trying to be reached by the wheels.
@@ -81,31 +100,34 @@ public class SwerveRotaters3 extends SubsystemBase {
     else if (horizontalIsPositive && verticalIsPositive){
       angle = 360 + angle; 
     }
-    System.out.println(angle);
+    //System.out.println(angle);
     return (angle);
   }
 
+  /*
   public double determineRot(double goal, TalonFX encoder){
     return (angleToPulse(goal)-getPosition(encoder))/256;
   }
-
+  */
   public void rotateMotors(double horizontal, double vertical){
     vertical *= -1;
-    double goal = angle(horizontal, vertical);
-
+    double goal = angleToPulse(horizontal, vertical);
+    //System.out.println(goal); // [0, 3300]
+    System.out.println(encoder1.getSelectedSensorPosition());
     if (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY){
       //System.out.println(angleToPulse(goal));
       
-      encoder1.set(ControlMode.MotionMagic, determineRot(goal, encoder1)* UNITS_PER_ROTATION);
-      encoder2.set(ControlMode.MotionMagic, determineRot(goal, encoder2)* UNITS_PER_ROTATION, DemandType.AuxPID, 0);
-      encoder3.set(ControlMode.MotionMagic, determineRot(goal, encoder3)* UNITS_PER_ROTATION);
-      encoder4.set(ControlMode.MotionMagic, determineRot(goal, encoder4)* UNITS_PER_ROTATION);
+      
+      encoder1.set(ControlMode.Position, goal);
+      encoder2.set(ControlMode.Position, goal);
+      encoder3.set(ControlMode.Position, goal);
+      encoder4.set(ControlMode.Position, goal);
     }
     else{
-      encoder1.set(ControlMode.Velocity, 0);
-      encoder2.set(ControlMode.Velocity, 0);
-      encoder3.set(ControlMode.Velocity, 0);
-      encoder4.set(ControlMode.Velocity, 0);
+      //encoder1.set(ControlMode.Position, encoder1.getSelectedSensorPosition());
+      //encoder2.set(ControlMode.Position, encoder2.getSelectedSensorPosition());
+      //encoder3.set(ControlMode.Position, encoder3.getSelectedSensorPosition());
+      //encoder4.set(ControlMode.Position, encoder4.getSelectedSensorPosition());
     }
   }
 

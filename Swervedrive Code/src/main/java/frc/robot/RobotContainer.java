@@ -44,13 +44,11 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /*
     SWERVESPINNERS.setDefaultCommand(
       new RunCommand(
-        () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS)),
+        () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), shopper.getRawAxis(ROTATIONAL_HORIZONTAL_AXIS)),
         SWERVESPINNERS
     ));
-    */
     SWERVEROTATERS.setDefaultCommand(
       new RunCommand(
         () -> SWERVEROTATERS.rotateMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS)),

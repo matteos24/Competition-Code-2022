@@ -29,31 +29,49 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double WHEE7L_DIAMETER_INCHES = 4;
   public static final double MOTOR_POWER = 0.5;
 
-  private WPI_TalonFX motor1, motor2, motor3, motor4;
-  private SpeedControllerGroup die_emre;
+  private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
+  private SpeedControllerGroup bR, bL, fR, fL;
   
   //This is the constructor for this subsytem.
   public SwerveSpinners() {
-    motor1 = new WPI_TalonFX(MOTOR_PORT_1);
-    
-    motor2 = new WPI_TalonFX(MOTOR_PORT_2);
-    motor3 = new WPI_TalonFX(MOTOR_PORT_3);
-    motor4 = new WPI_TalonFX(MOTOR_PORT_4);
-    die_emre = new SpeedControllerGroup(motor1, motor2, motor3, motor4);
+    bRMotor = new WPI_TalonFX(MOTOR_PORT_4);
+    bLMotor = new WPI_TalonFX(MOTOR_PORT_3);
+    fRMotor = new WPI_TalonFX(MOTOR_PORT_1);
+    fLMotor = new WPI_TalonFX(MOTOR_PORT_2);
+
+    bR = new SpeedControllerGroup(bRMotor);
+    bL = new SpeedControllerGroup(bLMotor);
+    fR = new SpeedControllerGroup(fRMotor);
+    fL = new SpeedControllerGroup(fLMotor);
   }
 
 
   //This function is the default command for the swervedrive motor spinners.
-  public void spinMotors(double horizontal, double vertical){
+  public void spinMotors(double horizontal, double vertical, double rotationHorizontal){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    if ((Math.pow(vertical, 2) + Math.pow(horizontal, 2)) >= CONTROLLER_SENSITIVITY){
-      double trueSpinSpeed = ((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2))*MOTOR_POWER);
-      die_emre.set(trueSpinSpeed*(getSpinDirection(vertical)));
-    }
-    else{
-      die_emre.set(0);
-    }
+    double r = Math.sqrt(L*L + W*W);
+
+
+    double a = (horizontal-rotationHorizontal) * (L/r);
+    double b = (horizontal + rotationHorizontal) * (L/r);
+    double c = (vertical - rotationHorizontal) * (W/r);
+    double d = (vertical+rotationHorizontal) * (W/r);
+    //check L & W with CAD people, yes...
+    double backRightSpeed = Math.sqrt(a*a + d*d);
+    double backLeftSpeed = Math.sqrt(a*a + c*c);
+    double frontRightSpeed = Math.sqrt(b*b + d*d);
+    double frontLeftSpeed = Math.sqrt(b*b + c*c);
+
+    bR.set(MOTOR_POWER*backRightSpeed);
+    bL.set(MOTOR_POWER*backLeftSpeed);
+    fR.set(MOTOR_POWER*frontRightSpeed);
+    fL.set(MOTOR_POWER*frontLeftSpeed);
+
+    /*
+    double trueSpinSpeed = ((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2))*MOTOR_POWER);
+    die_emre.set(-trueSpinSpeed*(getSpinDirection(vertical)));
+    */
   }
 
   /**
