@@ -29,7 +29,7 @@ public class RobotContainer {
 
   // SUBSYSTEMS
   public final SwerveSpinners SWERVESPINNERS = new SwerveSpinners();
-  public final SwerveRotaters3 SWERVEROTATERS = new SwerveRotaters3();
+  public final SwerveRotaters3 SWERVEROTATERS = new SwerveRotaters();
 
   
   public RobotContainer() {

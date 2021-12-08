@@ -67,20 +67,8 @@ public class SwerveSpinners extends SubsystemBase {
     bL.set(MOTOR_POWER*backLeftSpeed);
     fR.set(MOTOR_POWER*frontRightSpeed);
     fL.set(MOTOR_POWER*frontLeftSpeed);
-
-    /*
-    double trueSpinSpeed = ((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2))*MOTOR_POWER);
-    die_emre.set(-trueSpinSpeed*(getSpinDirection(vertical)));
-    */
   }
 
-  /**
-   * This function is for getting the direction for the spin of a wheel. The current angles are useless right now.
-   * However, it may be of a use if my thinking is wrong, so I did not erase it. 
-  */
-  private double getSpinDirection(double vertical){
-    return 1;
-  }
 
   @Override
   public void periodic() {
