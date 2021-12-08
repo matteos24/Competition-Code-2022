@@ -27,39 +27,59 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double MM_TO_IN = 0.0393701;
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
   public static final double WHEE7L_DIAMETER_INCHES = 4;
-  public static final double MOTOR_POWER = 0.45;
+  public static final double MOTOR_POWER = 0.5;
 
-  private WPI_TalonFX motor1, motor2, motor3, motor4;
+  private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
+  private SpeedControllerGroup bR, bL, fR, fL;
   
   //This is the constructor for this subsytem.
   public SwerveSpinners() {
-    motor1 = new WPI_TalonFX(MOTOR_PORT_1);
-    motor2 = new WPI_TalonFX(MOTOR_PORT_2);
-    motor3 = new WPI_TalonFX(MOTOR_PORT_3);
-    motor4 = new WPI_TalonFX(MOTOR_PORT_4);
+    bRMotor = new WPI_TalonFX(MOTOR_PORT_4);
+    bLMotor = new WPI_TalonFX(MOTOR_PORT_3);
+    fRMotor = new WPI_TalonFX(MOTOR_PORT_1);
+    fLMotor = new WPI_TalonFX(MOTOR_PORT_2);
+
+    bR = new SpeedControllerGroup(bRMotor);
+    bL = new SpeedControllerGroup(bLMotor);
+    fR = new SpeedControllerGroup(fRMotor);
+    fL = new SpeedControllerGroup(fLMotor);
   }
 
 
   //This function is the default command for the swervedrive motor spinners.
-  public void spinMotors(double horizontal, double vertical, double [] currentAngles){
+  public void spinMotors(double horizontal, double vertical, double rotationHorizontal){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    if (horizontal>= CONTROLLER_SENSITIVITY && vertical >= CONTROLLER_SENSITIVITY){
-      double trueSpinSpeed = (((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2)))*MOTOR_POWER);
-      motor1.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[0])));
-      motor2.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[1])));
-      motor3.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[2])));
-      motor4.set(ControlMode.PercentOutput, trueSpinSpeed*(getSpinDirection(vertical, currentAngles[3])));
-    }
+    double r = Math.sqrt(L*L + W*W);
+
+
+    double a = (horizontal-rotationHorizontal) * (L/r);
+    double b = (horizontal + rotationHorizontal) * (L/r);
+    double c = (vertical - rotationHorizontal) * (W/r);
+    double d = (vertical+rotationHorizontal) * (W/r);
+    //check L & W with CAD people, yes...
+    double backRightSpeed = Math.sqrt(a*a + d*d);
+    double backLeftSpeed = Math.sqrt(a*a + c*c);
+    double frontRightSpeed = Math.sqrt(b*b + d*d);
+    double frontLeftSpeed = Math.sqrt(b*b + c*c);
+
+    bR.set(MOTOR_POWER*backRightSpeed);
+    bL.set(MOTOR_POWER*backLeftSpeed);
+    fR.set(MOTOR_POWER*frontRightSpeed);
+    fL.set(MOTOR_POWER*frontLeftSpeed);
+
+    /*
+    double trueSpinSpeed = ((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2))*MOTOR_POWER);
+    die_emre.set(-trueSpinSpeed*(getSpinDirection(vertical)));
+    */
   }
 
   /**
    * This function is for getting the direction for the spin of a wheel. The current angles are useless right now.
    * However, it may be of a use if my thinking is wrong, so I did not erase it. 
   */
-  private double getSpinDirection(double vertical, double currentAngle){
-    if (vertical >= 0) return 1;
-    else return -1;
+  private double getSpinDirection(double vertical){
+    return 1;
   }
 
   @Override
