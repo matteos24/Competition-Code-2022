@@ -9,7 +9,7 @@ package frc.robot;
 
 public final class Constants {
 
-    // === MOTOR PORTS === //
+    // === SWERVEDRIVE === //
 
     // SwerveDrive MOTOR Ports
   
@@ -35,6 +35,7 @@ public final class Constants {
     public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 0;
     public static final int TRANSLATIONAL_VERTICAL_AXIS = 1;
     public static final int ROTATIONAL_HORIZONTAL_AXIS = 2;
+    public static final double CONTROLLER_SENSITIVITY = 0.1; // The value from the center of an axis to where it is, after which the code will actually run for the rotaters
 
     // Swervedrive Constants
     public static final double CONTROLLER_SENSITIVITY = 0.1;
