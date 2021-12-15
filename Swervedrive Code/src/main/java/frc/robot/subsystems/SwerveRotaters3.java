@@ -104,6 +104,10 @@ public class SwerveRotaters3 extends SubsystemBase {
     return (angle);
   }
 
+  public double getAngle(double horizontal, double vertical){
+    return angle(horizontal, -vertical);
+  }
+
   /*
   public double determineRot(double goal, TalonFX encoder){
     return (angleToPulse(goal)-getPosition(encoder))/256;
@@ -122,12 +126,6 @@ public class SwerveRotaters3 extends SubsystemBase {
       encoder2.set(ControlMode.Position, goal);
       encoder3.set(ControlMode.Position, goal);
       encoder4.set(ControlMode.Position, goal);
-    }
-    else{
-      //encoder1.set(ControlMode.Position, encoder1.getSelectedSensorPosition());
-      //encoder2.set(ControlMode.Position, encoder2.getSelectedSensorPosition());
-      //encoder3.set(ControlMode.Position, encoder3.getSelectedSensorPosition());
-      //encoder4.set(ControlMode.Position, encoder4.getSelectedSensorPosition());
     }
   }
 

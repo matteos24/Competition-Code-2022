@@ -27,7 +27,9 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double MM_TO_IN = 0.0393701;
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
   public static final double WHEE7L_DIAMETER_INCHES = 4;
-  public static final double MOTOR_POWER = 0.20;
+  public static final double MOTOR_POWER = 0.5;
+  public static final double SPEED_DIVIDER = 1.2;
+  public static final double ROTATION_COEFFICIENT= 0.83; //This can take a max value of (1/SPEED_DIVIDER)
 
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
@@ -47,15 +49,75 @@ public class SwerveSpinners extends SubsystemBase {
 
 
   //This function is the default command for the swervedrive motor spinners.
-  public void spinMotors(double horizontal, double vertical, double rotationHorizontal){
+  public void spinMotors(double horizontal, double vertical, double rotationHorizontal, double angle){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    double r = Math.sqrt(horizontal*horizontal + vertical*vertical);
+    double r = (Math.sqrt(horizontal*horizontal + vertical*vertical)/SPEED_DIVIDER);
+    //This makes the maximum power 0.5 so we can add and subtract 0.2 or something for rotation
 
     double backRightSpeed = r;
     double backLeftSpeed = r;
     double frontRightSpeed = r;
     double frontLeftSpeed = r;
+
+    // Change == 45 to like 40 to 50. 
+
+    if ((45>angle && angle>=0)||(angle>315)){
+      //left motors are increased, right are decreased
+      backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+
+    }
+    
+    if (angle == 45){
+      //only backLeft is increased
+      backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+    }
+
+    if (135>angle && angle>45){
+      //back motors are increased, front are decreased
+      backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+    }
+
+    if (angle == 135){
+      //backRight is increased
+      backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+    }
+
+    if (225>angle && angle>135){
+      //right motors are increased, left are decreased
+      backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+    }
+
+    if (angle == 225){
+      //frontRight is increased
+      frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+    }
+
+    if (315>angle && angle>225){
+      //front motors are increased, back are decreased
+      backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+    }
+
+    if (angle == 315) {
+      //frontLeft is increased, rightBack is decreased
+      frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+    }
 
     bR.set(MOTOR_POWER*backRightSpeed);
     bL.set(MOTOR_POWER*backLeftSpeed);
@@ -73,10 +135,6 @@ public class SwerveSpinners extends SubsystemBase {
    * This function is for getting the direction for the spin of a wheel. The current angles are useless right now.
    * However, it may be of a use if my thinking is wrong, so I did not erase it. 
   */
-  private double getSpinDirection(double vertical){
-    return 1;
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
