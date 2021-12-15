@@ -31,6 +31,7 @@ public class RobotContainer {
   // public final SwerveDrive SHOPPINGCART = new SwerveDrive();
   public final SwerveSpinners SWERVESPINNERS = new SwerveSpinners();
   public final SwerveRotaters SWERVEROTATERS = new SwerveRotaters();
+  public final Gyro GYRO = new Gyro();
 
   
   public RobotContainer() {
@@ -47,19 +48,19 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     //Swervedrive.exe
-    SWERVESPINNERS.setDefaultCommand(
-      new RunCommand(
-        () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),
-        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), shopper.getRawAxis(ROTATIONAL_HORIZONTAL_AXIS), SWERVEROTATERS.getAngle(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS), shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS))),
-        SWERVESPINNERS
-    ));
     SWERVEROTATERS.setDefaultCommand(
       new RunCommand(
         () -> SWERVEROTATERS.rotateMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),
-        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS)),
+        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), GYRO.getYaw()),
         SWERVEROTATERS
     ));
-
-
+    SWERVESPINNERS.setDefaultCommand(
+      new RunCommand(
+        () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),
+        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS),
+        shopper.getRawAxis(ROTATIONAL_HORIZONTAL_AXIS),
+        SWERVEROTATERS.getAngle(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS), shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), GYRO.getYaw())),
+        SWERVESPINNERS
+    ));
   }
 }

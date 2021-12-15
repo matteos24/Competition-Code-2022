@@ -83,12 +83,12 @@ public class SwerveRotaters extends SubsystemBase {
   }
 
   //This function gives the current angle that the provided encoder is pointing.
-  public double angleToPulse(double horizontal, double vertical){
-    return angle(horizontal, vertical)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360;
+  public double angleToPulse(double horizontal, double vertical, double yaw){
+    return angle(horizontal, vertical, yaw)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360;
   }
 
   // This function provides the goal angle that is trying to be reached by the wheels.
-  private double angle(double horizontal, double vertical){
+  private double angle(double horizontal, double vertical, double yaw){
     double angle = 0;
    
     angle = Math.toDegrees(Math.atan(-horizontal/vertical));
@@ -105,14 +105,21 @@ public class SwerveRotaters extends SubsystemBase {
     else if (horizontalIsPositive && verticalIsPositive){
       angle = 360 + angle; 
     }
-    //System.out.println(angle);
+    // This uses the yaw of the robot in order to calculate the angle we want to turn relative to the front
+    // of the robort, which is the 0 point of the encoders. 
+    if ((angle=>yaw) angle -= yaw;
+    else angle = 360 - (yaw-angle); 
     return (angle);
   }
 
-  public void rotateMotors(double horizontal, double vertical){
+  public double getAngle(double horizontal, double vertical, double yaw){
+    return angle(horizontal, -vertical, yaw);
+  }
+
+  public void rotateMotors(double horizontal, double vertical, double yaw){
     vertical *= -1;
     // This -1 is because the vertical axis provided by the controller is reversed.
-    double goal = angleToPulse(horizontal, vertical);
+    double goal = angleToPulse(horizontal, vertical, yaw);
     System.out.println(encoder1.getSelectedSensorPosition());
     if (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY){
       //These are the Position Control Methods for the encoders, essentially the heart of the rotaters file
@@ -123,6 +130,8 @@ public class SwerveRotaters extends SubsystemBase {
     }
     // If this statement is not true the method will not do anything
   }
+
+  public 
 
   @Override
   public void periodic() {
