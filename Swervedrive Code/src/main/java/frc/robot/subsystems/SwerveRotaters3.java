@@ -100,7 +100,7 @@ public class SwerveRotaters3 extends SubsystemBase {
     else if (horizontalIsPositive && verticalIsPositive){
       angle = 360 + angle; 
     }
-    //System.out.println(angle);
+    System.out.println(angle);
     return (angle);
   }
 
@@ -112,8 +112,8 @@ public class SwerveRotaters3 extends SubsystemBase {
   public void rotateMotors(double horizontal, double vertical){
     vertical *= -1;
     double goal = angleToPulse(horizontal, vertical);
-    //System.out.println(goal); // [0, 3300]
-    System.out.println(encoder1.getSelectedSensorPosition());
+    // System.out.println(goal); // [0, 3300]
+    // System.out.println(encoder1.getSelectedSensorPosition());
     if (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY){
       //System.out.println(angleToPulse(goal));
       

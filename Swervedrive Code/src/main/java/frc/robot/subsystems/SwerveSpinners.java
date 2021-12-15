@@ -27,7 +27,7 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double MM_TO_IN = 0.0393701;
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
   public static final double WHEE7L_DIAMETER_INCHES = 4;
-  public static final double MOTOR_POWER = 0.5;
+  public static final double MOTOR_POWER = 0.20;
 
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
@@ -50,23 +50,18 @@ public class SwerveSpinners extends SubsystemBase {
   public void spinMotors(double horizontal, double vertical, double rotationHorizontal){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    double r = Math.sqrt(L*L + W*W);
+    double r = Math.sqrt(horizontal*horizontal + vertical*vertical);
 
-
-    double a = (horizontal-rotationHorizontal) * (L/r);
-    double b = (horizontal + rotationHorizontal) * (L/r);
-    double c = (vertical - rotationHorizontal) * (W/r);
-    double d = (vertical+rotationHorizontal) * (W/r);
-    //check L & W with CAD people, yes...
-    double backRightSpeed = Math.sqrt(a*a + d*d);
-    double backLeftSpeed = Math.sqrt(a*a + c*c);
-    double frontRightSpeed = Math.sqrt(b*b + d*d);
-    double frontLeftSpeed = Math.sqrt(b*b + c*c);
+    double backRightSpeed = r;
+    double backLeftSpeed = r;
+    double frontRightSpeed = r;
+    double frontLeftSpeed = r;
 
     bR.set(MOTOR_POWER*backRightSpeed);
     bL.set(MOTOR_POWER*backLeftSpeed);
     fR.set(MOTOR_POWER*frontRightSpeed);
     fL.set(MOTOR_POWER*frontLeftSpeed);
+    //Super idol de xiao rong
 
     /*
     double trueSpinSpeed = ((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2))*MOTOR_POWER);

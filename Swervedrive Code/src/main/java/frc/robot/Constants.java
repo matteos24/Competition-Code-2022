@@ -19,7 +19,7 @@ public final class Constants {
     //DOne
     public static final int MOTOR_PORT_3 = 3;
     //Done
-    public static final int MOTOR_PORT_4 = 7; // done
+    public static final int MOTOR_PORT_4 = 7; 
     //Done
     public static final int ROTATOR_PORT_1 = 4;
     //Done
@@ -42,8 +42,8 @@ public final class Constants {
     public static final double P_CONSTANT = 1.0/360.0;
     public static final double GEAR_RATIO = 12.8;
     public static final double UNITS_PER_ROTATION = 2048;
-    public static final double L = 1;
-    public static final double W = 1;
+    public static final double L = 24.174;
+    public static final double W = 24.183;
 
 
     public static final int kSlotIdx = 0;
@@ -64,5 +64,5 @@ public final class Constants {
 	 * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    public static final Gains kGains = new Gains(1.0, 0.0, 0.0, 0.0, 0, 1.0);
+    public static final Gains kGains = new Gains(0.1, 0.0, 0.0, 0.0, 0, 0.0);
 }
