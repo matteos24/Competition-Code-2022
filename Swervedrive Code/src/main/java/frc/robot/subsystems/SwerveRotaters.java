@@ -12,63 +12,63 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class SwerveRotaters3 extends SubsystemBase {
+public class SwerveRotaters extends SubsystemBase {
   /** These are the variables that are created for this subsytem.. */
-  private TalonFX encoder1, encoder2, encoder3, encoder4;
+  private TalonFX fRRotater, bRRotater, bLRotater, fLRotater;
   public final double ENCODER_PULSES_PER_ROTATION = 2048;
   //Configure the turn power into the control mode pid somehow, I think there is a method for RPM or something -> check pls:)
   public final double TURN_POWER = 0.25;
   //This is the constructor where the rotater motors are created (named encoders) and are reset.
-  public SwerveRotaters3() {
-    encoder1 = new TalonFX(ROTATOR_PORT_1);
-    encoder2 = new TalonFX(ROTATOR_PORT_2);
-    encoder3 = new TalonFX(ROTATOR_PORT_3);
-    encoder4 = new TalonFX(ROTATOR_PORT_4);
-    encoder1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-    encoder2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-    encoder3.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
-    encoder4.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+  public SwerveRotaters() {
+    fRRotater = new TalonFX(ROTATOR_PORT_1);
+    fLRotater = new TalonFX(ROTATOR_PORT_2);
+    bLRotater = new TalonFX(ROTATOR_PORT_3);
+    bRRotater = new TalonFX(ROTATOR_PORT_4);
+    fRRotater.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    fLRotater.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    bRRotater.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
+    bLRotater.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     resetEncoders();
 
-    encoder1.configFactoryDefault();
-    encoder1.set(ControlMode.Velocity,0);
-    encoder1.config_kP(0, kGains.kP);
-    encoder1.config_kI(0, kGains.kI);
-    encoder1.config_kD(0, kGains.kD);
-    encoder1.config_kF(0, kGains.kF); 
-    encoder1.setSensorPhase(true);
+    fRRotater.configFactoryDefault();
+    fRRotater.set(ControlMode.Velocity,0);
+    fRRotater.config_kP(0, kGains.kP);
+    fRRotater.config_kI(0, kGains.kI);
+    fRRotater.config_kD(0, kGains.kD);
+    fRRotater.config_kF(0, kGains.kF); 
+    fRRotater.setSensorPhase(true);
 
-    encoder2.configFactoryDefault();
-    encoder2.set(ControlMode.Velocity,0);
-    encoder2.config_kP(0, kGains.kP);
-    encoder2.config_kI(0, kGains.kI);
-    encoder2.config_kD(0, kGains.kD);
-    encoder2.config_kF(0, kGains.kF); 
-    encoder2.setSensorPhase(true);
+    fLRotater.configFactoryDefault();
+    fLRotater.set(ControlMode.Velocity,0);
+    fLRotater.config_kP(0, kGains.kP);
+    fLRotater.config_kI(0, kGains.kI);
+    fLRotater.config_kD(0, kGains.kD);
+    fLRotater.config_kF(0, kGains.kF); 
+    fLRotater.setSensorPhase(true);
 
-    encoder3.configFactoryDefault();
-    encoder3.set(ControlMode.Velocity,0);
-    encoder3.config_kP(0, kGains.kP);
-    encoder3.config_kI(0, kGains.kI);
-    encoder3.config_kD(0, kGains.kD);
-    encoder3.config_kF(0, kGains.kF); 
-    encoder3.setSensorPhase(true);
+    bRRotater.configFactoryDefault();
+    bRRotater.set(ControlMode.Velocity,0);
+    bRRotater.config_kP(0, kGains.kP);
+    bRRotater.config_kI(0, kGains.kI);
+    bRRotater.config_kD(0, kGains.kD);
+    bRRotater.config_kF(0, kGains.kF); 
+    bRRotater.setSensorPhase(true);
     
-    encoder4.configFactoryDefault();
-    encoder4.set(ControlMode.Velocity,0);
-    encoder4.config_kP(0, kGains.kP);
-    encoder4.config_kI(0, kGains.kI);
-    encoder4.config_kD(0, kGains.kD);
-    encoder4.config_kF(0, kGains.kF); 
-    encoder4.setSensorPhase(true);
+    bLRotater.configFactoryDefault();
+    bLRotater.set(ControlMode.Velocity,0);
+    bLRotater.config_kP(0, kGains.kP);
+    bLRotater.config_kI(0, kGains.kI);
+    bLRotater.config_kD(0, kGains.kD);
+    bLRotater.config_kF(0, kGains.kF); 
+    bLRotater.setSensorPhase(true);
     
   }
   //This function resets the encoders when the subsytem is initialized
   public void resetEncoders(){
-    encoder1.setSelectedSensorPosition(0);
-    encoder2.setSelectedSensorPosition(0);
-    encoder3.setSelectedSensorPosition(0);
-    encoder4.setSelectedSensorPosition(0);
+    fRRotater.setSelectedSensorPosition(0);
+    fLRotater.setSelectedSensorPosition(0);
+    bRRotater.setSelectedSensorPosition(0);
+    bLRotater.setSelectedSensorPosition(0);
   }
 
   //This function returns the position of the encoder that is provided...
@@ -108,24 +108,14 @@ public class SwerveRotaters3 extends SubsystemBase {
     return angle(horizontal, -vertical);
   }
 
-  /*
-  public double determineRot(double goal, TalonFX encoder){
-    return (angleToPulse(goal)-getPosition(encoder))/256;
-  }
-  */
   public void rotateMotors(double horizontal, double vertical){
     vertical *= -1;
     double goal = angleToPulse(horizontal, vertical);
-    // System.out.println(goal); // [0, 3300]
-    // System.out.println(encoder1.getSelectedSensorPosition());
     if (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY){
-      //System.out.println(angleToPulse(goal));
-      
-      
-      encoder1.set(ControlMode.Position, goal);
-      encoder2.set(ControlMode.Position, goal);
-      encoder3.set(ControlMode.Position, goal);
-      encoder4.set(ControlMode.Position, goal);
+      fRRotater.set(ControlMode.Position, goal);
+      fLRotater.set(ControlMode.Position, goal);
+      bRRotater.set(ControlMode.Position, goal);
+      bLRotater.set(ControlMode.Position, goal);
     }
   }
 

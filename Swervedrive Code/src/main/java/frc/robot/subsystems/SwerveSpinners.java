@@ -26,10 +26,10 @@ public class SwerveSpinners extends SubsystemBase {
   /** These are the variables for the SwerveSpinners subsytem. */
   public static final double MM_TO_IN = 0.0393701;
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
-  public static final double WHEE7L_DIAMETER_INCHES = 4;
+  public static final double WHEEL_DIAMETER_INCHES = 4;
   public static final double MOTOR_POWER = 0.5;
   public static final double SPEED_DIVIDER = 1.2;
-  public static final double ROTATION_COEFFICIENT= 0.83; //This can take a max value of (1/SPEED_DIVIDER)
+  public static final double ROTATION_COEFFICIENT= 0.16; //This can take a max value of 1-(1/SPEED_DIVIDER)
 
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
@@ -53,88 +53,155 @@ public class SwerveSpinners extends SubsystemBase {
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
     double r = (Math.sqrt(horizontal*horizontal + vertical*vertical)/SPEED_DIVIDER);
-    //This makes the maximum power 0.5 so we can add and subtract 0.2 or something for rotation
+    //This makes the maximum power 1/Speed Divider. So, we can essentially add to some of the motors and
+    // get it to rotate without going above 1 by accident, which would just turn to 1. (Probably)
 
+    //Here the initial speeds are set to the value r - calculated above -
     double backRightSpeed = r;
     double backLeftSpeed = r;
     double frontRightSpeed = r;
     double frontLeftSpeed = r;
 
-    // Change == 45 to like 40 to 50. 
-
-    if ((45>angle && angle>=0)||(angle>315)){
+    //If the horizontal and vertical are enough to make it move translationally then this will compute.
+    // I commented out the decrease operations in order to decrease skid. (NEED TO TEST)
+    if (Math.sqrt(horizontal*horizontal + vertical*vertical)>=CONTROLLER_SENSITIVITY){
+      if ((45>angle && angle>=0)||(angle>315)){
       //left motors are increased, right are decreased
       backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
       frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-      frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      //backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      //frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
 
-    }
-    
-    if (angle == 45){
-      //only backLeft is increased
-      backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-    }
+      }
+      
+      if (angle == 45){
+        //only backLeft is increased
+        backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+        //frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      }
 
-    if (135>angle && angle>45){
-      //back motors are increased, front are decreased
-      backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-      backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-    }
+      if (135>angle && angle>45){
+        //back motors are increased, front are decreased
+        backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+        //frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+        backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+        //frontRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      }
 
-    if (angle == 135){
-      //backRight is increased
-      backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-    }
+      if (angle == 135){
+        //backRight is increased
+        backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+        //frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      }
 
-    if (225>angle && angle>135){
-      //right motors are increased, left are decreased
-      backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-      frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-      backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-    }
+      if (225>angle && angle>135){
+        //right motors are increased, left are decreased
+        //backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+        //frontLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+        backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+        frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      }
 
-    if (angle == 225){
-      //frontRight is increased
-      frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-    }
+      if (angle == 225){
+        //frontRight is increased
+        frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+        //backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      }
 
-    if (315>angle && angle>225){
-      //front motors are increased, back are decreased
-      backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-      frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
-      frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-    }
+      if (315>angle && angle>225){
+        //front motors are increased, back are decreased
+        //backLeftSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+        frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+        //backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+        frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+      }
 
-    if (angle == 315) {
-      //frontLeft is increased, rightBack is decreased
-      frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-      backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      if (angle == 315) {
+        //frontLeft is increased, rightBack is decreased
+        frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
+        //backRightSpeed -= ROTATION_COEFFICIENT*rotationHorizontal;
+      }
     }
+    //This part is for no translation. There are always opposite speeds but other 2 speeds are 0 in order
+    // to just rotate without translation.
+    else{
+      if ((45>angle && angle>=0)||(angle>315)){
+      //left motors are increased, right are decreased
+      backLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+      frontLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+      backRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+      frontRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
 
+      }
+      
+      if (angle == 45){
+        //only backLeft is increased
+        backLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        frontRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        //other two are 0
+        backRightSpeed = 0;
+        frontLeftSpeed = 0;
+      }
+
+      if (135>angle && angle>45){
+        //back motors are increased, front are decreased
+        backLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        frontLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        backRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        frontRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+      }
+
+      if (angle == 135){
+        //backRight is increased
+        backRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        frontLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        //other two are 0
+        backLeftSpeed = 0;
+        frontRightSpeed = 0;
+      }
+
+      if (225>angle && angle>135){
+        //right motors are increased, left are decreased
+        backLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        frontLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        backRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        frontRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+      }
+
+      if (angle == 225){
+        //frontRight is increased
+        frontRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        backLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        //other two are 0
+        frontLeftSpeed = 0;
+        backRightSpeed = 0;
+      }
+
+      if (315>angle && angle>225){
+        //front motors are increased, back are decreased
+        backLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        frontLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        backRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        frontRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+      }
+
+      if (angle == 315) {
+        //frontLeft is increased, rightBack is decreased
+        frontLeftSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        backRightSpeed = ROTATION_COEFFICIENT*rotationHorizontal;
+        //other 2 are 0
+        frontRightSpeed = 0;
+        backLeftSpeed = 0;
+      }
+    }
     bR.set(MOTOR_POWER*backRightSpeed);
     bL.set(MOTOR_POWER*backLeftSpeed);
     fR.set(MOTOR_POWER*frontRightSpeed);
     fL.set(MOTOR_POWER*frontLeftSpeed);
-    //Super idol de xiao rong
 
-    /*
-    double trueSpinSpeed = ((Math.sqrt(Math.pow(horizontal, 2)+Math.pow(vertical,2)))/(Math.sqrt(2))*MOTOR_POWER);
-    die_emre.set(-trueSpinSpeed*(getSpinDirection(vertical)));
-    */
+    //Super idol de xiao rong
   }
 
-  /**
-   * This function is for getting the direction for the spin of a wheel. The current angles are useless right now.
-   * However, it may be of a use if my thinking is wrong, so I did not erase it. 
-  */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
