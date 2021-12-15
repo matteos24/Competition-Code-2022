@@ -100,8 +100,12 @@ public class SwerveRotaters3 extends SubsystemBase {
     else if (horizontalIsPositive && verticalIsPositive){
       angle = 360 + angle; 
     }
-    //System.out.println(angle);
+    System.out.println(angle);
     return (angle);
+  }
+
+  public double getAngle(double horizontal, double vertical){
+    return angle(horizontal, -vertical);
   }
 
   /*
@@ -112,8 +116,8 @@ public class SwerveRotaters3 extends SubsystemBase {
   public void rotateMotors(double horizontal, double vertical){
     vertical *= -1;
     double goal = angleToPulse(horizontal, vertical);
-    //System.out.println(goal); // [0, 3300]
-    System.out.println(encoder1.getSelectedSensorPosition());
+    // System.out.println(goal); // [0, 3300]
+    // System.out.println(encoder1.getSelectedSensorPosition());
     if (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY){
       //System.out.println(angleToPulse(goal));
       
@@ -122,12 +126,6 @@ public class SwerveRotaters3 extends SubsystemBase {
       encoder2.set(ControlMode.Position, goal);
       encoder3.set(ControlMode.Position, goal);
       encoder4.set(ControlMode.Position, goal);
-    }
-    else{
-      //encoder1.set(ControlMode.Position, encoder1.getSelectedSensorPosition());
-      //encoder2.set(ControlMode.Position, encoder2.getSelectedSensorPosition());
-      //encoder3.set(ControlMode.Position, encoder3.getSelectedSensorPosition());
-      //encoder4.set(ControlMode.Position, encoder4.getSelectedSensorPosition());
     }
   }
 
