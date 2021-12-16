@@ -28,7 +28,8 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
   public static final double WHEEL_DIAMETER_INCHES = 4;
   public static final double MOTOR_POWER = 0.8;
-  public static final double SPEED_DIVIDER = 4.6;
+  public static final double ONLY_ROTATION_MULTIPLIER = 0.3;
+  public static final double SPEED_DIVIDER = 4.5;
   public static final double ROTATION_COEFFICIENT= 1-(1/SPEED_DIVIDER); //This can take a max value of 1-(1/SPEED_DIVIDER)
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
@@ -160,10 +161,10 @@ public class SwerveSpinners extends SubsystemBase {
     // to just rotate without translation.
     else if(Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY){
       //set the motors to 
-      backRightSpeed = -rotationHorizontal;
-      frontRightSpeed = -rotationHorizontal;
-      backLeftSpeed = -rotationHorizontal;
-      frontLeftSpeed = -rotationHorizontal;
+      backRightSpeed = -rotationHorizontal*ONLY_ROTATION_MULTIPLIER;
+      frontRightSpeed = -rotationHorizontal*ONLY_ROTATION_MULTIPLIER;
+      backLeftSpeed = -rotationHorizontal*ONLY_ROTATION_MULTIPLIER;
+      frontLeftSpeed = -rotationHorizontal*ONLY_ROTATION_MULTIPLIER;
       
     }
     bR.set(MOTOR_POWER*backRightSpeed);
@@ -172,6 +173,14 @@ public class SwerveSpinners extends SubsystemBase {
     fL.set(MOTOR_POWER*frontLeftSpeed);
 
     //Super idol de xiao rong
+  }
+
+  public void autoTranslational(double x, double y, double totalDistance){
+    double initialPosition = bRMotor.getSelectedSensorPosition();
+    while((Math.PI*WHEEL_DIAMETER_INCHES*360*(bRMotor.getSelectedSensorPosition()-initialPosition)/2048)<totalDistance){
+      spinMotors(x, -y, 0, 0);
+    }
+
   }
 
   @Override
