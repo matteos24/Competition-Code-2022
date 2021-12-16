@@ -106,7 +106,9 @@ public class SwerveRotaters extends SubsystemBase {
       angle = 360 + angle; 
     }
     // This uses the yaw of the robot in order to calculate the angle we want to turn relative to the front
-    // of the robort, which is the 0 point of the encoders. 
+    // of the robot, which is the 0 point of the encoders. 
+    // yaw = Math.toDegrees(yaw);
+    System.out.println(yaw);
     if (angle>=yaw) angle -= yaw;
     else angle = 360 - (yaw-angle); 
     return (angle);
@@ -116,7 +118,7 @@ public class SwerveRotaters extends SubsystemBase {
     return angle(horizontal, -vertical, yaw);
   }
 
-  public void rotateMotors(double horizontal, double vertical, double yaw){
+  public void rotateMotors(double horizontal, double vertical, double rotationHorizontal, double yaw){
     vertical *= -1;
     // This -1 is because the vertical axis provided by the controller is reversed.
     double goal = angleToPulse(horizontal, vertical, yaw);
@@ -126,6 +128,12 @@ public class SwerveRotaters extends SubsystemBase {
       fLRotater.set(ControlMode.Position, goal);
       bLRotater.set(ControlMode.Position, goal);
       bRRotater.set(ControlMode.Position, goal);
+    }
+    else if(Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY){
+      fRRotater.set(ControlMode.Position, 45*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+      fLRotater.set(ControlMode.Position, 135*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+      bLRotater.set(ControlMode.Position, 225*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+      bRRotater.set(ControlMode.Position, 315*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
     }
     // If this statement is not true the method will not do anything
   }
