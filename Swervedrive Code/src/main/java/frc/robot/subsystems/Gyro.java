@@ -6,14 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import static frc.robot.Constants.*;
+//import static frc.robot.Constants.*;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -37,7 +31,7 @@ public class Gyro extends SubsystemBase {
 
     // Constructer
     public Gyro() {
-        PigeonIMU gyro = new PigeonIMU(0);
+        gyro = new PigeonIMU(0);
         PigeonIMU.GeneralStatus genStatus = new PigeonIMU.GeneralStatus();
         resetValues();
         calibrateGyro();
