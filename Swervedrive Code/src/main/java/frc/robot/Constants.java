@@ -38,7 +38,6 @@ public final class Constants {
     public static final double CONTROLLER_SENSITIVITY = 0.1; // The value from the center of an axis to where it is, after which the code will actually run for the rotaters
 
     // Swervedrive Constants
-    public static final double CONTROLLER_SENSITIVITY = 0.1;
     public static final double ANGLE_RANGE = 2;
     public static final double P_CONSTANT = 1.0/360.0;
     public static final double GEAR_RATIO = 12.8;

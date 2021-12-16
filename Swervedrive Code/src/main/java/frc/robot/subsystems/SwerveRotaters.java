@@ -107,7 +107,7 @@ public class SwerveRotaters extends SubsystemBase {
     }
     // This uses the yaw of the robot in order to calculate the angle we want to turn relative to the front
     // of the robort, which is the 0 point of the encoders. 
-    if ((angle=>yaw) angle -= yaw;
+    if (angle>=yaw) angle -= yaw;
     else angle = 360 - (yaw-angle); 
     return (angle);
   }
@@ -120,7 +120,6 @@ public class SwerveRotaters extends SubsystemBase {
     vertical *= -1;
     // This -1 is because the vertical axis provided by the controller is reversed.
     double goal = angleToPulse(horizontal, vertical, yaw);
-    System.out.println(encoder1.getSelectedSensorPosition());
     if (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY){
       //These are the Position Control Methods for the encoders, essentially the heart of the rotaters file
       fRRotater.set(ControlMode.Position, goal);
@@ -130,8 +129,6 @@ public class SwerveRotaters extends SubsystemBase {
     }
     // If this statement is not true the method will not do anything
   }
-
-  public 
 
   @Override
   public void periodic() {

@@ -39,7 +39,7 @@ public class Gyro extends SubsystemBase {
     public Gyro() {
         PigeonIMU gyro = new PigeonIMU(0);
         PigeonIMU.GeneralStatus genStatus = new PigeonIMU.GeneralStatus();
-        resetvalues();
+        resetValues();
         calibrateGyro();
         getState();
     }
