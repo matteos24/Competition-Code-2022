@@ -30,7 +30,8 @@ public class RobotContainer {
   // SUBSYSTEMS
   // public final SwerveDrive SHOPPINGCART = new SwerveDrive();
   public final SwerveSpinners SWERVESPINNERS = new SwerveSpinners();
-  public final SwerveRotaters3 SWERVEROTATERS = new SwerveRotaters3();
+  public final SwerveRotaters SWERVEROTATERS = new SwerveRotaters();
+  public final Gyro GYRO = new Gyro();
 
   
   public RobotContainer() {
@@ -44,28 +45,22 @@ public class RobotContainer {
    * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  /*
   private void configureButtonBindings() {
-    SHOPPINGCART.setDefaultCommand(
-      new RunCommand(
-        () -> SHOPPINGCART.runSwerve(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),
-        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), shopper.getRawAxis(ROTATIONAL_HORIZONTAL_AXIS)),
-        SHOPPINGCART
-    ));
-  }
-  */
-  private void configureButtonBindings() {
-    SWERVESPINNERS.setDefaultCommand(
-      new RunCommand(
-        () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),
-        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), shopper.getRawAxis(ROTATIONAL_HORIZONTAL_AXIS), SWERVEROTATERS.getAngle(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS), shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS))),
-        SWERVESPINNERS
-    ));
+
+    //Swervedrive.exe
     SWERVEROTATERS.setDefaultCommand(
       new RunCommand(
         () -> SWERVEROTATERS.rotateMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),
-        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS)),
+        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), GYRO.getYaw()),
         SWERVEROTATERS
+    ));
+    SWERVESPINNERS.setDefaultCommand(
+      new RunCommand(
+        () -> SWERVESPINNERS.spinMotors(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS),
+        shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS),
+        shopper.getRawAxis(ROTATIONAL_HORIZONTAL_AXIS),
+        SWERVEROTATERS.getAngle(shopper.getRawAxis(TRANSLATIONAL_HORIZONTAL_AXIS), shopper.getRawAxis(TRANSLATIONAL_VERTICAL_AXIS), GYRO.getYaw())),
+        SWERVESPINNERS
     ));
   }
 }
