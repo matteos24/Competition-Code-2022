@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import static frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
+//import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -106,8 +106,10 @@ public class SwerveRotaters extends SubsystemBase {
       angle = 360 + angle; 
     }
     // This uses the yaw of the robot in order to calculate the angle we want to turn relative to the front
-    // of the robort, which is the 0 point of the encoders. 
-    if ((angle=>yaw) angle -= yaw;
+    // of the robot, which is the 0 point of the encoders. 
+    // yaw = Math.toDegrees(yaw);
+    System.out.println(yaw);
+    if (angle>=yaw) angle -= yaw;
     else angle = 360 - (yaw-angle); 
     return (angle);
   }
@@ -116,11 +118,10 @@ public class SwerveRotaters extends SubsystemBase {
     return angle(horizontal, -vertical, yaw);
   }
 
-  public void rotateMotors(double horizontal, double vertical, double yaw){
+  public void rotateMotors(double horizontal, double vertical, double rotationHorizontal, double yaw){
     vertical *= -1;
     // This -1 is because the vertical axis provided by the controller is reversed.
     double goal = angleToPulse(horizontal, vertical, yaw);
-    System.out.println(encoder1.getSelectedSensorPosition());
     if (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY){
       //These are the Position Control Methods for the encoders, essentially the heart of the rotaters file
       fRRotater.set(ControlMode.Position, goal);
@@ -128,10 +129,14 @@ public class SwerveRotaters extends SubsystemBase {
       bLRotater.set(ControlMode.Position, goal);
       bRRotater.set(ControlMode.Position, goal);
     }
+    else if(Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY){
+      fRRotater.set(ControlMode.Position, 45*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+      fLRotater.set(ControlMode.Position, 135*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+      bLRotater.set(ControlMode.Position, 225*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+      bRRotater.set(ControlMode.Position, 315*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+    }
     // If this statement is not true the method will not do anything
   }
-
-  public 
 
   @Override
   public void periodic() {
