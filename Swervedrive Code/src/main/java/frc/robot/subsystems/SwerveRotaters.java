@@ -16,6 +16,7 @@ public class SwerveRotaters extends SubsystemBase {
   /** These are the variables that are created for this subsytem.. */
   private TalonFX fRRotater, fLRotater, bLRotater, bRRotater;
   public final double ENCODER_PULSES_PER_ROTATION = 2048;
+  public final double ROTATION_POW = 30;
   
   //Configure the turn power into the control mode pid somehow, I think there is a method for RPM or something -> check pls:)
 
@@ -122,18 +123,53 @@ public class SwerveRotaters extends SubsystemBase {
     vertical *= -1;
     // This -1 is because the vertical axis provided by the controller is reversed.
     double goal = angleToPulse(horizontal, vertical, yaw);
-    if (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY){
+    double angle = angle(horizontal, vertical, yaw);
+    boolean isRotating = Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY;
+    boolean isTranslating = (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY);
+    if (isTranslating && !isRotating){
       //These are the Position Control Methods for the encoders, essentially the heart of the rotaters file
       fRRotater.set(ControlMode.Position, goal);
       fLRotater.set(ControlMode.Position, goal);
       bLRotater.set(ControlMode.Position, goal);
       bRRotater.set(ControlMode.Position, goal);
     }
-    else if(Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY){
+    else if(isRotating && !isTranslating){
       fRRotater.set(ControlMode.Position, 45*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
       fLRotater.set(ControlMode.Position, 135*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
       bLRotater.set(ControlMode.Position, 225*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
       bRRotater.set(ControlMode.Position, 315*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+    }
+    else if (isRotating && isTranslating){
+      System.out.println("hello");
+      //zone 1
+      if(((angle>=0)&&(45>angle))&&((360>angle)&&(angle>=315))){
+        fRRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        fLRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        bLRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        bRRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+      }
+      //zone 2
+      else if((angle>=45)&&(135>angle)){
+        bLRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        fLRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        fRRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        bRRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+      }
+      //zone 3
+      else if((angle>=135)&&(225>angle)){
+        bLRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        bRRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        fLRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        fRRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        
+      }
+      //zone 4
+      else if((angle>=225)&&(315>angle)){
+        fRRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        bRRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        bLRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        fLRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360); 
+      }
     }
     // If this statement is not true the method will not do anything
   }

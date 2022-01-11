@@ -27,11 +27,9 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double MM_TO_IN = 0.0393701;
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
   public static final double WHEEL_DIAMETER_INCHES = 4;
-  public static final double MOTOR_POWER = 0.8;
   // It may be more logical to use no SPEED MULTIPLIER and rather just depend on the controller input(investigate)
-  public static final double SPEED_MULTIPLIER = 0.5;
-  public static final double ROTATION_COEFFICIENT= 1-(SPEED_MULTIPLIER); //This can take a max value of 1-(1/SPEED_DIVIDER)
-  public static final double ONLY_ROTATION_MULTIPLIER = ROTATION_COEFFICIENT; // For smooth transition between only rotation to rotation & trans.
+  public static final double SPEED_MULTIPLIER = 0.4;
+  public static final double ROTATION_COEFFICIENT = 0.25;
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
   
@@ -53,97 +51,43 @@ public class SwerveSpinners extends SubsystemBase {
   public void spinMotors(double horizontal, double vertical, double rotationHorizontal, double angle){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    double r = (Math.sqrt(horizontal*horizontal + vertical*vertical)*SPEED_MULTIPLIER);
+    double r = (Math.pow(Math.sqrt(horizontal*horizontal + vertical*vertical),1)*SPEED_MULTIPLIER);
     //This makes the maximum power 1/Speed Divider. So, we can essentially add to some of the motors and
     // get it to rotate without going above 1 by accident, which would just turn to 1. (Probably)
 
     //Here the initial speeds are set to the value r - calculated above -
-    double backRightSpeed = r;
-    double backLeftSpeed = r;
-    double frontRightSpeed = r;
-    double frontLeftSpeed = r;
+    double backRightSpeed = 0;
+    double backLeftSpeed = 0;
+    double frontRightSpeed = 0;
+    double frontLeftSpeed = 0;
 
-    //If the horizontal and vertical are enough to make it move translationally then this will compute.
-    // I commented out the decrease operations in order to decrease skid. (NEED TO TEST)
-
-    /*
-    Physically an object will mantain its energy or state if there is sufficient force to sustain it.
-    If the net force changes, the translational state of the object might change. Therefore, when doing rotation,
-    it is important that to decrease the power on two wheels, while increasing the power of the other two. 
-    
-    Notice also that the operation below account for both + and - rotationalHorizontal.
-     */
-    if (Math.sqrt(horizontal*horizontal + vertical*vertical)>=CONTROLLER_SENSITIVITY){
-      if ((45>angle && angle>0)||(angle>315)){
-        backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        //
-        backRightSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-        frontRightSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-      }
-      
-      if (angle == 45){
-        backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        //
-        frontRightSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-      }
-
-      if (135>angle && angle>45){
-        backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        backLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        //
-        frontLeftSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-        frontRightSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-      }
-
-      if (angle == 135){
-        backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        //
-        frontLeftSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-      }
-
-      if (225>angle && angle>135){
-        backRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        //
-        backLeftSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-        frontLeftSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-      }
-
-      if (angle == 225){
-          frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-          //
-          backLeftSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-      }
-
-      if (315>angle && angle>225){
-        frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        frontRightSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-        //
-        backLeftSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-        backRightSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-      }
-
-      if (angle == 315) {
-          frontLeftSpeed += ROTATION_COEFFICIENT*rotationHorizontal;
-          //
-          backRightSpeed -= ROTATION_COEFFICIENT*(rotationHorizontal);
-      }
+    boolean isRotating = Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY;
+    boolean isTranslating = (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY);
+    if (!isRotating&&isTranslating){
+      frontRightSpeed = r;
+      backLeftSpeed = r;
+      backRightSpeed = r;
+      frontLeftSpeed = r;
+    }
+    else if(isRotating && !isTranslating){
+      backRightSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+      frontRightSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+      backLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+      frontLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+    }
+    else if (isRotating && isTranslating){
+      frontRightSpeed = r;
+      backLeftSpeed = r;
+      backRightSpeed = r;
+      frontLeftSpeed = r;
     }
     //This part is for no translation. There are always opposite speeds but other 2 speeds are 0 in order
     // to just rotate without translation.
-    else if(Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY){
-      //set the motor powers to 
-      backRightSpeed = -rotationHorizontal*ONLY_ROTATION_MULTIPLIER;
-      frontRightSpeed = -rotationHorizontal*ONLY_ROTATION_MULTIPLIER;
-      backLeftSpeed = -rotationHorizontal*ONLY_ROTATION_MULTIPLIER;
-      frontLeftSpeed = -rotationHorizontal*ONLY_ROTATION_MULTIPLIER;
-      
-    }
-    bR.set(MOTOR_POWER*backRightSpeed);
-    bL.set(MOTOR_POWER*backLeftSpeed);
-    fR.set(MOTOR_POWER*frontRightSpeed);
-    fL.set(MOTOR_POWER*frontLeftSpeed);
+
+    bR.set(backRightSpeed);
+    bL.set(backLeftSpeed);
+    fR.set(frontRightSpeed);
+    fL.set(frontLeftSpeed);
 
     //amogus
   }
