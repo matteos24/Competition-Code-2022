@@ -16,7 +16,7 @@ public class SwerveRotaters extends SubsystemBase {
   /** These are the variables that are created for this subsytem.. */
   private TalonFX fRRotater, fLRotater, bLRotater, bRRotater;
   public final double ENCODER_PULSES_PER_ROTATION = 2048;
-  public final double ROTATION_POW = 30;
+  public final double ROTATION_POW = 40;
   
   //Configure the turn power into the control mode pid somehow, I think there is a method for RPM or something -> check pls:)
 
@@ -109,7 +109,7 @@ public class SwerveRotaters extends SubsystemBase {
     // This uses the yaw of the robot in order to calculate the angle we want to turn relative to the front
     // of the robot, which is the 0 point of the encoders. 
     // yaw = Math.toDegrees(yaw);
-    System.out.println(yaw);
+    //System.out.println(yaw);
     if (angle>=yaw) angle -= yaw;
     else angle = 360 - (yaw-angle); 
     return (angle);
@@ -140,7 +140,6 @@ public class SwerveRotaters extends SubsystemBase {
       bRRotater.set(ControlMode.Position, 315*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
     }
     else if (isRotating && isTranslating){
-      System.out.println("hello");
       //zone 1
       if(((angle>=0)&&(45>angle))&&((360>angle)&&(angle>=315))){
         fRRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
