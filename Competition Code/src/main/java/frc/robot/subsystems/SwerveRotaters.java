@@ -87,9 +87,7 @@ public class SwerveRotaters extends SubsystemBase {
   // This function provides the goal angle that is trying to be reached by the wheels.
   private double angle(double horizontal, double vertical, double yaw){
     double angle = 0;
-   
     angle = Math.toDegrees(Math.atan(-horizontal/vertical));
-
     boolean horizontalIsPositive = (horizontal>0);
     boolean verticalIsPositive = (vertical>0);
 
@@ -104,8 +102,6 @@ public class SwerveRotaters extends SubsystemBase {
     }
     // This uses the yaw of the robot in order to calculate the angle we want to turn relative to the front
     // of the robot, which is the 0 point of the encoders. 
-    // yaw = Math.toDegrees(yaw);
-    //System.out.println(yaw);
     if (angle>=yaw) angle -= yaw;
     else angle = 360 - (yaw-angle); 
     return (angle);
@@ -156,7 +152,6 @@ public class SwerveRotaters extends SubsystemBase {
         bRRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
         fLRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
         fRRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
-        
       }
       //zone 4
       else if((angle>=225)&&(315>angle)){

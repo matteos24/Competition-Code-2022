@@ -5,21 +5,10 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
 import static frc.robot.Constants.*;
-
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-//import com.ctre.phoenix.motorcontrol.ControlMode;
-//import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-//import com.ctre.phoenix.sensors.CANCoder;
-
-//import edu.wpi.first.wpilibj.Encoder;
-//import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-//import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 
 public class SwerveSpinners extends SubsystemBase {
 
@@ -47,77 +36,45 @@ public class SwerveSpinners extends SubsystemBase {
     fL = new SpeedControllerGroup(fLMotor);
   }
 
-
   //This function is the default command for the swervedrive motor spinners.
   public void spinMotors(double horizontal, double vertical, double rotationHorizontal, double angle){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
     double r = (Math.pow(Math.sqrt(horizontal*horizontal + vertical*vertical),1)*SPEED_MULTIPLIER);
-    //This makes the maximum power 1/Speed Divider. So, we can essentially add to some of the motors and
-    // get it to rotate without going above 1 by accident, which would just turn to 1. (Probably)
 
     //Here the initial speeds are set to the value r - calculated above -
     double backRightSpeed = 0;
     double backLeftSpeed = 0;
     double frontRightSpeed = 0;
     double frontLeftSpeed = 0;
-
     boolean isRotating = Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY;
     boolean isTranslating = (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY);
+
     if (!isRotating&&isTranslating){
       frontRightSpeed = r;
       backLeftSpeed = r;
       backRightSpeed = r;
       frontLeftSpeed = r;
     }
+
     else if(isRotating && !isTranslating){
       backRightSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
       frontRightSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
       backLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
       frontLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
     }
+
     else if (isRotating && isTranslating){
-      double divisor = 1;
-      /**
-      if((angle>=0)&&(45>angle)){
-        divisor = Math.toDegrees(Math.cos(angle));
-      }
-      if((angle>=45)&&(90>angle)){
-        divisor = Math.toDegrees(Math.cos(angle-90));
-      }
-      if((angle>=90)&&(135>angle)){
-        divisor = Math.toDegrees(Math.cos(angle-90));
-      }
-      if((angle>=135)&&(180>angle)){
-        divisor = Math.toDegrees(Math.cos(angle-180));
-      }
-      if((angle>=180)&&(225>angle)){
-        divisor = Math.toDegrees(Math.cos(angle-180));
-      }
-      if((angle>=225)&&(270>angle)){
-        divisor = Math.toDegrees(Math.cos(angle-270));
-      }
-      if((angle>=270)&&(315>angle)){
-        divisor = Math.toDegrees(Math.cos(angle-270));
-      }
-      if((angle>=315)&&(360>angle)){
-        divisor = Math.toDegrees(Math.cos(angle));
-      }
-      */
-      frontRightSpeed = r/divisor;
-      backLeftSpeed = r/divisor;
-      backRightSpeed = r/divisor;
-      frontLeftSpeed = r/divisor;
+      frontRightSpeed = r;
+      backLeftSpeed = r;
+      backRightSpeed = r;
+      frontLeftSpeed = r;
     }
-    //This part is for no translation. There are always opposite speeds but other 2 speeds are 0 in order
-    // to just rotate without translation.
 
     bR.set(backRightSpeed);
     bL.set(backLeftSpeed);
     fR.set(frontRightSpeed);
     fL.set(frontLeftSpeed);
-
-    //amogus
   }
 
   public void autoTranslational(double x, double y, double totalDistance){
@@ -125,13 +82,10 @@ public class SwerveSpinners extends SubsystemBase {
     while((Math.PI*WHEEL_DIAMETER_INCHES*360*(bRMotor.getSelectedSensorPosition()-initialPosition)/2048)<totalDistance){
       spinMotors(x, -y, 0, 0);
     }
-
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
   }
-
 }

@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 //import edu.wpi.first.wpilibj2.command.StartEndCommand;
 //import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.*;
-import frc.robot.commands.*;
+//import frc.robot.commands.*;
 //import frc.robot.triggers.*;
 
 import static frc.robot.Constants.*;
@@ -29,10 +29,15 @@ public class RobotContainer {
   public final Joystick shopper = new Joystick(CONTROLLER_0);
 
   // SUBSYSTEMS
-  // public final SwerveDrive SHOPPINGCART = new SwerveDrive();
+
+    //Drivetrain Subs
   public final SwerveSpinners SWERVESPINNERS = new SwerveSpinners();
   public final SwerveRotaters SWERVEROTATERS = new SwerveRotaters();
   public final Gyro GYRO = new Gyro();
+    //Mechanism Subs
+  public final Sheeesh SHEEESH = new Sheeesh();
+  public final Intake INTAKE = new Intake();
+
 
   
   public RobotContainer() {

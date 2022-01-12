@@ -30,6 +30,9 @@ public final class Constants {
     public static final int ROTATOR_PORT_4 = 6;
     //Done
 
+    //Gyro
+    public static final int GYRO_PORT = 11;
+
     //Controller Constants
     public static final int CONTROLLER_0 = 0;
     public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 0;

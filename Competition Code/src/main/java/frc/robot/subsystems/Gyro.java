@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import static frc.robot.Constants.*;
+import static frc.robot.Constants.*;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -31,8 +31,7 @@ public class Gyro extends SubsystemBase {
 
     // Constructer
     public Gyro() {
-        gyro = new PigeonIMU(11);
-        PigeonIMU.GeneralStatus genStatus = new PigeonIMU.GeneralStatus();
+        gyro = new PigeonIMU(GYRO_PORT);
         resetValues();
         calibrateGyro();
         getState();
