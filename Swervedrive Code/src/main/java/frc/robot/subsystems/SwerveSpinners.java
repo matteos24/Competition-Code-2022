@@ -28,8 +28,9 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
   public static final double WHEEL_DIAMETER_INCHES = 4;
   // It may be more logical to use no SPEED MULTIPLIER and rather just depend on the controller input(investigate)
-  public static final double SPEED_MULTIPLIER = 0.4;
-  public static final double ROTATION_COEFFICIENT = 0.25;
+  public static final double SPEED_MULTIPLIER = 0.7;
+  public static final double ROTATION_COEFFICIENT = 0.5;
+  public static final double ROTATION_BOOST = 0; //Max value of 1-Speed Multiplier
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
   
@@ -76,10 +77,35 @@ public class SwerveSpinners extends SubsystemBase {
       frontLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
     }
     else if (isRotating && isTranslating){
-      frontRightSpeed = r;
-      backLeftSpeed = r;
-      backRightSpeed = r;
-      frontLeftSpeed = r;
+      double divisor = 1;
+      if((angle>=0)&&(45>angle)){
+        divisor = Math.toDegrees(Math.cos(angle));
+      }
+      if((angle>=45)&&(90>angle)){
+        divisor = Math.toDegrees(Math.cos(angle-90));
+      }
+      if((angle>=90)&&(135>angle)){
+        divisor = Math.toDegrees(Math.cos(angle-90));
+      }
+      if((angle>=135)&&(180>angle)){
+        divisor = Math.toDegrees(Math.cos(angle-180));
+      }
+      if((angle>=180)&&(225>angle)){
+        divisor = Math.toDegrees(Math.cos(angle-180));
+      }
+      if((angle>=225)&&(270>angle)){
+        divisor = Math.toDegrees(Math.cos(angle-270));
+      }
+      if((angle>=270)&&(315>angle)){
+        divisor = Math.toDegrees(Math.cos(angle-270));
+      }
+      if((angle>=315)&&(360>angle)){
+        divisor = Math.toDegrees(Math.cos(angle));
+      }
+      frontRightSpeed = r/divisor+ROTATION_BOOST;
+      backLeftSpeed = r/divisor+ROTATION_BOOST;
+      backRightSpeed = r/divisor+ROTATION_BOOST;
+      frontLeftSpeed = r/divisor+ROTATION_BOOST;
     }
     //This part is for no translation. There are always opposite speeds but other 2 speeds are 0 in order
     // to just rotate without translation.
