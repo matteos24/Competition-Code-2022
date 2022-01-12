@@ -22,9 +22,12 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double ROTATION_COEFFICIENT = 0.5;
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
+  public static boolean swerveSwitch;
   
   //This is the constructor for this subsytem.
   public SwerveSpinners() {
+    swerveSwitch = false;
+
     bRMotor = new WPI_TalonFX(MOTOR_PORT_4);
     bLMotor = new WPI_TalonFX(MOTOR_PORT_3);
     fRMotor = new WPI_TalonFX(MOTOR_PORT_1);
@@ -36,45 +39,68 @@ public class SwerveSpinners extends SubsystemBase {
     fL = new SpeedControllerGroup(fLMotor);
   }
 
+  public boolean getSwitch() {return swerveSwitch;}
+
+  public void toggleSwitch(){
+    if(swerveSwitch==true) swerveSwitch = false;
+    else swerveSwitch = true;
+  }
+
   //This function is the default command for the swervedrive motor spinners.
   public void spinMotors(double horizontal, double vertical, double rotationHorizontal, double angle){
     //This -1 is due to how the vertical axis works on the controller. 
     vertical *= -1;
-    double r = (Math.pow(Math.sqrt(horizontal*horizontal + vertical*vertical),1)*SPEED_MULTIPLIER);
 
-    //Here the initial speeds are set to the value r - calculated above -
-    double backRightSpeed = 0;
-    double backLeftSpeed = 0;
-    double frontRightSpeed = 0;
-    double frontLeftSpeed = 0;
-    boolean isRotating = Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY;
-    boolean isTranslating = (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY);
+    if(swerveSwitch == false){
+      double r = (Math.pow(Math.sqrt(horizontal*horizontal + vertical*vertical),1)*SPEED_MULTIPLIER);
 
-    if (!isRotating&&isTranslating){
-      frontRightSpeed = r;
-      backLeftSpeed = r;
-      backRightSpeed = r;
-      frontLeftSpeed = r;
+      //Here the initial speeds are set to the value r - calculated above -
+      double backRightSpeed = 0;
+      double backLeftSpeed = 0;
+      double frontRightSpeed = 0;
+      double frontLeftSpeed = 0;
+      boolean isRotating = Math.abs(rotationHorizontal)>=CONTROLLER_SENSITIVITY;
+      boolean isTranslating = (Math.sqrt((Math.pow(vertical, 2) + Math.pow(horizontal, 2))) >= CONTROLLER_SENSITIVITY);
+
+      if (!isRotating&&isTranslating){
+        frontRightSpeed = r;
+        backLeftSpeed = r;
+        backRightSpeed = r;
+        frontLeftSpeed = r;
+      }
+
+      else if(isRotating && !isTranslating){
+        backRightSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+        frontRightSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+        backLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+        frontLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+      }
+
+      else if (isRotating && isTranslating){
+        frontRightSpeed = r;
+        backLeftSpeed = r;
+        backRightSpeed = r;
+        frontLeftSpeed = r;
+      }
+
+      bR.set(backRightSpeed);
+      bL.set(backLeftSpeed);
+      fR.set(frontRightSpeed);
+      fL.set(frontLeftSpeed);
     }
 
-    else if(isRotating && !isTranslating){
-      backRightSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
-      frontRightSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
-      backLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
-      frontLeftSpeed = -rotationHorizontal*ROTATION_COEFFICIENT;
+    else{
+      double y;
+      double x;
+      if(Math.abs(vertical) < 0.02) y = 0;
+      if(Math.abs(rotationHorizontal) < 0.02) x = 0;        
+      y = Math.abs(vertical) * SPEED_MULTIPLIER;
+      x = Math.abs(rotationHorizontal) * SPEED_MULTIPLIER; 
+      bR.set(-(y-x));
+      bL.set(y+x);
+      fR.set(-(y-x));
+      fL.set(y+x);
     }
-
-    else if (isRotating && isTranslating){
-      frontRightSpeed = r;
-      backLeftSpeed = r;
-      backRightSpeed = r;
-      frontLeftSpeed = r;
-    }
-
-    bR.set(backRightSpeed);
-    bL.set(backLeftSpeed);
-    fR.set(frontRightSpeed);
-    fL.set(frontLeftSpeed);
   }
 
   public void autoTranslational(double x, double y, double totalDistance){
