@@ -16,11 +16,7 @@ public class SwerveRotaters extends SubsystemBase {
   /** These are the variables that are created for this subsytem.. */
   private TalonFX fRRotater, fLRotater, bLRotater, bRRotater;
   public final double ENCODER_PULSES_PER_ROTATION = 2048;
-  public final double ROTATION_POW = 40;
-  
-  //Configure the turn power into the control mode pid somehow, I think there is a method for RPM or something -> check pls:)
-
-  public final double TURN_POWER = 0.25;
+  public final double ROTATION_POW = 45;
 
   // This is the constructor where the rotater motors are created (named encoders) and are reset.
   // In addition this is where the PIDf initilization occurs for each rotater motor (again named encoders 1, 2, 3, & 4)
@@ -141,7 +137,7 @@ public class SwerveRotaters extends SubsystemBase {
     }
     else if (isRotating && isTranslating){
       //zone 1
-      if(((angle>=0)&&(45>angle))&&((360>angle)&&(angle>=315))){
+      if(((angle>=0)&&(45>angle))||((360>angle)&&(angle>=315))){
         fRRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
         fLRotater.set(ControlMode.Position, ((angle-rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
         bLRotater.set(ControlMode.Position, ((angle+rotationHorizontal*ROTATION_POW)%360)*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
