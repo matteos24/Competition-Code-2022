@@ -23,8 +23,8 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double WHEEL_TO_WHEEL_DIAMETER_INCHES = 320 * MM_TO_IN;
   public static final double WHEEL_DIAMETER_INCHES = 4;
   // It may be more logical to use no SPEED MULTIPLIER and rather just depend on the controller input(investigate)
-  public static final double ROTTRANSCUT = 0;
-  public static final double SPEED_MULTIPLIER = 1/(Math.sqrt(2))-ROTTRANSCUT;
+  // public static final double ROTTRANSCUT = 0;
+  public static final double SPEED_MULTIPLIER = 1/(Math.sqrt(2));
   public static final double ROTATION_COEFFICIENT = 0.5;
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
@@ -39,17 +39,17 @@ public class SwerveSpinners extends SubsystemBase {
     fRMotor = new WPI_TalonFX(MOTOR_PORT_1);
     fLMotor = new WPI_TalonFX(MOTOR_PORT_2);
 
-    fLMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 25, 20, 1.0));
-    fLMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 20, 1.0));
+    fLMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20,21,1));
+    fLMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20,21,1));
 
-    fRMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 25, 20, 1.0));
-    fRMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 20, 1.0));
+    fRMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20,21,1));
+    fRMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20,21,1));
 
-    bRMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 25, 20, 1.0));
-    bRMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 20, 1.0));
+    bRMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20,21,1));
+    bRMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20,21,1));
     
-    bLMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 25, 20, 1.0));
-    bLMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 20, 1.0));
+    bLMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20,21,1));
+    bLMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20,21,1));
 
 
     bR = new SpeedControllerGroup(bRMotor);
