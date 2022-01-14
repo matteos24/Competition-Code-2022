@@ -9,7 +9,10 @@ import static frc.robot.Constants.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 //import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveRotaters extends SubsystemBase {
@@ -30,6 +33,29 @@ public class SwerveRotaters extends SubsystemBase {
     fLRotater = new TalonFX(ROTATOR_PORT_2);
     bLRotater = new TalonFX(ROTATOR_PORT_3);
     bRRotater = new TalonFX(ROTATOR_PORT_4);
+
+    //tester shit below
+    // this works i hope
+    // enabled, limit amp, trigger, amp, trigger thrrehosld time
+    fRRotater.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    fRRotater.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 25, 1.0));
+
+    fLRotater.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    fLRotater.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 25, 1.0));
+
+    bLRotater.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    bLRotater.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 25, 1.0));
+
+    bRRotater.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+    bRRotater.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 25, 1.0));
+
+    /* likely wrong
+    fRRotater.configVoltageCompSaturation(20);
+    fRRotater.enableVoltageCompensation(true);
+    */
+    // end of nonsense
+
+
     fRRotater.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     fLRotater.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);
     bLRotater.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 0);

@@ -6,7 +6,13 @@
 
 package frc.robot.subsystems;
 import static frc.robot.Constants.*;
+
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+// import org.graalvm.compiler.asm.sparc.SPARCAssembler.Br;
+
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,7 +28,7 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double ROTATION_COEFFICIENT = 0.5;
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
-  public static boolean swerveSwitch;
+  public static boolean swerveSwitch; // tank drive go brrrrrrr
   
   //This is the constructor for this subsytem.
   public SwerveSpinners() {
@@ -32,6 +38,19 @@ public class SwerveSpinners extends SubsystemBase {
     bLMotor = new WPI_TalonFX(MOTOR_PORT_3);
     fRMotor = new WPI_TalonFX(MOTOR_PORT_1);
     fLMotor = new WPI_TalonFX(MOTOR_PORT_2);
+
+    fLMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 25, 20, 1.0));
+    fLMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 20, 1.0));
+
+    fRMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 25, 20, 1.0));
+    fRMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 20, 1.0));
+
+    bRMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 25, 20, 1.0));
+    bRMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 20, 1.0));
+    
+    bLMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 25, 20, 1.0));
+    bLMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 25, 20, 1.0));
+
 
     bR = new SpeedControllerGroup(bRMotor);
     bL = new SpeedControllerGroup(bLMotor);
