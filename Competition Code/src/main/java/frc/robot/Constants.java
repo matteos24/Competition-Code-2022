@@ -14,21 +14,19 @@ public final class Constants {
     // SwerveDrive MOTOR Ports
   
     public static final int MOTOR_PORT_1 = 5;
-    //Done
     public static final int MOTOR_PORT_2 = 8;
-    //DOne
     public static final int MOTOR_PORT_3 = 3;
-    //Done
     public static final int MOTOR_PORT_4 = 7; 
-    //Done
     public static final int ROTATOR_PORT_1 = 4;
-    //Done
     public static final int ROTATOR_PORT_2 = 2;
-    //Done
     public static final int ROTATOR_PORT_3 = 1;
-    //Done
     public static final int ROTATOR_PORT_4 = 6;
-    //Done
+    //Needs calibrating
+    public static final int ROLLER_INTAKE_PORT = 10;
+    //Not sure if intake needs pistons or not
+    //public static final int INTAKE_PISTON_PORT_1 = 10;
+    //public static final int INTAKE_PISTON_PORT_2 = 11;
+
 
     //Gyro
     public static final int GYRO_PORT = 11;
@@ -40,6 +38,8 @@ public final class Constants {
     public static final int ROTATIONAL_HORIZONTAL_AXIS = 2;
     public static final double CONTROLLER_SENSITIVITY = 0.1; // The value from the center of an axis to where it is, after which the code will actually run for the rotaters
     public static final int DRIVESWITCHBUTTON = 9; // Check this
+    public static final int INTAKE_BUTTON = 3;
+    public static final int OUTTAKE_BUTTON = 4;
 
     // Swervedrive Constants
     public static final double ANGLE_RANGE = 2;
@@ -48,6 +48,9 @@ public final class Constants {
     public static final double UNITS_PER_ROTATION = 2048;
     public static final double L = 24.174;
     public static final double W = 24.183;
+    
+    //Speed constants
+    public static final double ROLLER_INTAKE_SPEED = 0.5;
 
     //Swervedrive PID Stuff
     public static final int kSlotIdx = 0;
