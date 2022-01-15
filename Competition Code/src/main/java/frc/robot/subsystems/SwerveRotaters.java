@@ -37,9 +37,10 @@ public class SwerveRotaters extends SubsystemBase {
     //tester shit below
     // this works i hope
     // enabled, limit amp, trigger, amp, trigger thrrehosld time
+    // more test
     fRRotater.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 21, 1));
     fRRotater.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 21, 1));
-
+    // hello
     fLRotater.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20, 21, 1));
     fLRotater.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20, 21, 1));
 
@@ -147,7 +148,6 @@ public class SwerveRotaters extends SubsystemBase {
   public double getAngle(double horizontal, double vertical, double yaw){
     return angle(horizontal, -vertical, yaw);
   }
-
   public void rotateMotors(double horizontal, double vertical, double rotationHorizontal, double yaw){
     vertical *= -1;
     // This -1 is because the vertical axis provided by the controller is reversed.

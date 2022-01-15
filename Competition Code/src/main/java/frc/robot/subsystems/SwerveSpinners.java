@@ -25,7 +25,7 @@ public class SwerveSpinners extends SubsystemBase {
   // It may be more logical to use no SPEED MULTIPLIER and rather just depend on the controller input(investigate)
   // public static final double ROTTRANSCUT = 0;
   public static final double SPEED_MULTIPLIER = 1/(Math.sqrt(2));
-  public static final double ROTATION_COEFFICIENT = 0.5;
+  public static final double ROTATION_COEFFICIENT = 0.35;
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;
   public static boolean swerveSwitch; // tank drive go brrrrrrr
@@ -38,7 +38,7 @@ public class SwerveSpinners extends SubsystemBase {
     bLMotor = new WPI_TalonFX(MOTOR_PORT_3);
     fRMotor = new WPI_TalonFX(MOTOR_PORT_1);
     fLMotor = new WPI_TalonFX(MOTOR_PORT_2);
-
+// test
     fLMotor.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, 20,21,1));
     fLMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 20,21,1));
 
