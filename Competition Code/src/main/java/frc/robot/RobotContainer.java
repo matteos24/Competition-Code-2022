@@ -18,9 +18,11 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 //import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.CatapaultCommand;
 import frc.robot.subsystems.*;
 //import frc.robot.commands.*;
 //import frc.robot.triggers.*;
+import jdk.jfr.internal.tool.Command;
 
 import static frc.robot.Constants.*;
 
@@ -38,10 +40,14 @@ public class RobotContainer {
     //Mechanism Subs
   public final Sheeesh SHEEESH = new Sheeesh();
   public final Intake INTAKE = new Intake();
+  
+  public final Catapault CATAPAULT = new Catapault();
 
   public final JoystickButton modeSwitchButton = new JoystickButton(shopper, DRIVESWITCHBUTTON);
   public final InstantCommand modeSwitchRotaters = new InstantCommand(() -> SWERVEROTATERS.toggleSwitch(), SWERVEROTATERS);
   public final InstantCommand modeSwitchTrans = new InstantCommand(()-> SWERVESPINNERS.toggleSwitch(), SWERVESPINNERS);
+  public final JoystickButton catapaultButton = new JoystickButton(shopper, CATAPAULT_BUTTON);
+  public CatapaultCommand catapaultCommand = new CatapaultCommand();
   
   public RobotContainer() {
     // Configure the button bindings
@@ -76,6 +82,8 @@ public class RobotContainer {
         () -> GYRO.getState(),
         GYRO
     ));
+
+    catapaultButton.whenPressed(catapaultCommand);
 
     modeSwitchButton.whenPressed(modeSwitchRotaters);
     modeSwitchButton.whenPressed(modeSwitchTrans);

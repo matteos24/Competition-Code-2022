@@ -14,22 +14,26 @@ public final class Constants {
     // SwerveDrive MOTOR Ports
   
     public static final int MOTOR_PORT_1 = 5;
-    //Done
-    public static final int MOTOR_PORT_2 = 8;
-    //DOne
-    public static final int MOTOR_PORT_3 = 3;
-    //Done
-    public static final int MOTOR_PORT_4 = 7; 
-    //Done
-    public static final int ROTATOR_PORT_1 = 4;
-    //Done
-    public static final int ROTATOR_PORT_2 = 2;
-    //Done
-    public static final int ROTATOR_PORT_3 = 1;
-    //Done
-    public static final int ROTATOR_PORT_4 = 6;
-    //Done
 
+    public static final int MOTOR_PORT_2 = 8;
+
+    public static final int MOTOR_PORT_3 = 3;
+
+    public static final int MOTOR_PORT_4 = 7; 
+
+    public static final int ROTATOR_PORT_1 = 4;
+
+    public static final int ROTATOR_PORT_2 = 2;
+   
+    public static final int ROTATOR_PORT_3 = 1;
+ 
+    public static final int ROTATOR_PORT_4 = 6;
+  
+
+    public static final int CATAPAULT_PISTON_PORT_1 = 0;
+    public static final int CATAPAULT_PISTON_PORT_2 = 0;
+    public static final int CATAPAULT_PISTON_PORT_3 = 0;
+    public static final int CATAPAULT_PISTON_PORT_4 = 0;
     //Gyro
     public static final int GYRO_PORT = 11;
 
@@ -40,6 +44,7 @@ public final class Constants {
     public static final int ROTATIONAL_HORIZONTAL_AXIS = 2;
     public static final double CONTROLLER_SENSITIVITY = 0.1; // The value from the center of an axis to where it is, after which the code will actually run for the rotaters
     public static final int DRIVESWITCHBUTTON = 9; // Check this
+    public static final int CATAPAULT_BUTTON = 2;
 
     // Swervedrive Constants
     public static final double ANGLE_RANGE = 2;
