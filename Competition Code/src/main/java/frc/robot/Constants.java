@@ -45,6 +45,7 @@ public final class Constants {
     public static final double ANGLE_RANGE = 2;
     public static final double P_CONSTANT = 1.0/360.0;
     public static final double GEAR_RATIO = 12.8;
+    public static final double GEAR_RATIO_ROTATER = 6.86;
     public static final double UNITS_PER_ROTATION = 2048;
     public static final double L = 24.174;
     public static final double W = 24.183;
@@ -56,5 +57,8 @@ public final class Constants {
     public static final int kSlotIdx = 0;
 	public static final int kPIDLoopIdx = 0;
     public static final int kTimeoutMs = 30;
-    public static final Gains kGains = new Gains(0.1, 0.0, 0.0, 0.0, 0, 0.0);
+    public static final Gains kGains = new Gains(0.1, 0.0, 0.0, 0.0, 0, 0.0); //coamnds 
+    public static final Gains jGains = new Gains(0.1,0.0,0.0,0.0,0, 0.0); // spinners
+    public static final double ERROR_TOLERANCE = 25;
+
 }

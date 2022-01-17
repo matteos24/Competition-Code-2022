@@ -10,6 +10,7 @@ import static frc.robot.Constants.*;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 // import org.graalvm.compiler.asm.sparc.SPARCAssembler.Br;
 
@@ -56,7 +57,52 @@ public class SwerveSpinners extends SubsystemBase {
     bL = new SpeedControllerGroup(bLMotor);
     fR = new SpeedControllerGroup(fRMotor);
     fL = new SpeedControllerGroup(fLMotor);
+
   }
+  public void configPID(){
+    
+    fLMotor.configFactoryDefault();
+    fLMotor.set(ControlMode.Velocity,0);
+    fLMotor.config_kP(0, jGains.kP);
+    fLMotor.config_kI(0, jGains.kI);
+    fLMotor.config_kD(0, jGains.kD);
+    fLMotor.config_kF(0, jGains.kF); 
+    fLMotor.setSensorPhase(true);
+
+    fRMotor.configFactoryDefault();
+    fRMotor.set(ControlMode.Velocity,0);
+    fRMotor.config_kP(0, jGains.kP);
+    fRMotor.config_kI(0, jGains.kI);
+    fRMotor.config_kD(0, jGains.kD);
+    fRMotor.config_kF(0, jGains.kF); 
+    fRMotor.setSensorPhase(true);
+
+    bLMotor.configFactoryDefault();
+    bLMotor.set(ControlMode.Velocity,0);
+    bLMotor.config_kP(0, jGains.kP);
+    bLMotor.config_kI(0, jGains.kI);
+    bLMotor.config_kD(0, jGains.kD);
+    bLMotor.config_kF(0, jGains.kF); 
+    bLMotor.setSensorPhase(true);
+    
+    bRMotor.configFactoryDefault();
+    bRMotor.set(ControlMode.Velocity,0);
+    bRMotor.config_kP(0, jGains.kP);
+    bRMotor.config_kI(0, jGains.kI);
+    bRMotor.config_kD(0, jGains.kD);
+    bRMotor.config_kF(0, jGains.kF); 
+    bRMotor.setSensorPhase(true);
+    
+  }
+
+
+  public void resetEncoders(){
+    fRMotor.setSelectedSensorPosition(0);
+    fLMotor.setSelectedSensorPosition(0);
+    bLMotor.setSelectedSensorPosition(0);
+    bRMotor.setSelectedSensorPosition(0);
+  }
+  
 
   public boolean getSwitch() {return swerveSwitch;}
 
@@ -122,12 +168,48 @@ public class SwerveSpinners extends SubsystemBase {
     }
   }
 
+
   public void autoTranslational(double x, double y, double totalDistance){
     double initialPosition = bRMotor.getSelectedSensorPosition();
     while((Math.PI*WHEEL_DIAMETER_INCHES*360*(bRMotor.getSelectedSensorPosition()-initialPosition)/2048)<totalDistance){
       spinMotors(x, -y, 0, 0);
     }
   }
+
+
+  public double pulsesToCm(double p){
+      // 2048 pulses to a rotation
+      return p*WHEEL_DIAMETER_INCHES*2.54*Math.PI/UNITS_PER_ROTATION;
+  }
+
+
+  //takes distance (cm) divides by cm per rotation and then multiplies by pulses per rotation
+  public double cmToPulses(double cm){
+    return GEAR_RATIO_ROTATER*UNITS_PER_ROTATION*cm/(WHEEL_DIAMETER_INCHES*2.54*Math.PI);
+  }
+
+
+  public void driveDistance(double a, double b, double c, double d){
+    resetEncoders();
+    bRMotor.set(ControlMode.Position, cmToPulses(a));
+    bLMotor.set(ControlMode.Position, cmToPulses(b));
+    fRMotor.set(ControlMode.Position, cmToPulses(c));
+    fLMotor.set(ControlMode.Position, cmToPulses(d));
+  }
+
+
+  public boolean reachedPosition(double a, double b, double c, double d){
+    if (checkError(bRMotor, a) && checkError(bLMotor, b) && checkError(fRMotor, c) && checkError(fLMotor, d)) {
+      return true;
+    }
+    return false;
+  }
+
+
+  private boolean checkError(WPI_TalonFX motor, double d){
+    return motor.getSelectedSensorPosition() < d + ERROR_TOLERANCE && motor.getSelectedSensorPosition() > d - ERROR_TOLERANCE;
+  }
+
 
   @Override
   public void periodic() {
