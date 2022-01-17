@@ -148,6 +148,16 @@ public class SwerveRotaters extends SubsystemBase {
   public double getAngle(double horizontal, double vertical, double yaw){
     return angle(horizontal, -vertical, yaw);
   }
+  public void autorotate(double targetAngle, double yaw){
+
+        while (targetAngle != yaw){
+        fRRotater.set(ControlMode.Position, 45*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        fLRotater.set(ControlMode.Position, 135*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        bLRotater.set(ControlMode.Position, 225*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        bRRotater.set(ControlMode.Position, 315*(ENCODER_PULSES_PER_ROTATION*GEAR_RATIO)/360);
+        }                                                                           
+      
+  }
   public void rotateMotors(double horizontal, double vertical, double rotationHorizontal, double yaw){
     vertical *= -1;
     // This -1 is because the vertical axis provided by the controller is reversed.
@@ -207,6 +217,13 @@ public class SwerveRotaters extends SubsystemBase {
       bRRotater.set(ControlMode.Position, 0);
     }
 
+  }
+
+  public void setWheelDirection(double fR, double fL, double bR, double bL) {
+    fRRotater.set(ControlMode.Position, fR);
+    fLRotater.set(ControlMode.Position, fL);
+    bLRotater.set(ControlMode.Position, bL);
+    bRRotater.set(ControlMode.Position, bR);
   }
 
   @Override

@@ -5,25 +5,16 @@
 package frc.robot.commands.AutoCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SwerveSpinners;
 
-public class MoveTo extends CommandBase {
-  SwerveSpinners swerve;
-  double d;
-
-  /** Creates a new moveTo. */
-  public MoveTo(SwerveSpinners swerve, double d) {
+public class SetWheelDirections extends CommandBase {
+  /** Creates a new SetWheelDirections. */
+  public SetWheelDirections() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(swerve);
-    this.swerve = swerve;
-    this.d = d;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    swerve.driveDistance(d, d, d, d);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -36,9 +27,6 @@ public class MoveTo extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (swerve.reachedPosition(d, d, d, d)){
-      return true;
-    }
     return false;
   }
 }
