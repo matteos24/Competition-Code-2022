@@ -8,17 +8,17 @@ import frc.robot.subsystems.Catapault;
 
 public class CatapaultCommand extends CommandBase
 {
-   private Catapult catapault;
+   private Catapault catapault;
    
-    public CatapaultCommand(Catapult catapault){
-        addRequirements(Catapault);
-        this.catapault = Catapault;
+    public CatapaultCommand(Catapault catapault) {
+        addRequirements(catapault);
+        this.catapault = catapault;
         catapault.retractAll();
     }
 
     @Override
     public void initialize(){
-        catapault.toggle();
+        catapault.togglePistons();
     }
 
     @Override

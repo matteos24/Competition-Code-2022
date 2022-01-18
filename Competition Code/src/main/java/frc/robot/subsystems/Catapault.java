@@ -9,8 +9,11 @@ import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.pheonix.DoubleSolenoid;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 public class Catapault extends SubsystemBase
 {
