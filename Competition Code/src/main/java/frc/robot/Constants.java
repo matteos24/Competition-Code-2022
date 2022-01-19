@@ -29,13 +29,13 @@ public final class Constants {
 
 
     //Gyro
-    public static final int GYRO_PORT = 11;
+    public static final int GYRO_PORT = 9;
 
     //Controller Constants
     public static final int CONTROLLER_0 = 0;
     public static final int TRANSLATIONAL_HORIZONTAL_AXIS = 0;
     public static final int TRANSLATIONAL_VERTICAL_AXIS = 1;
-    public static final int ROTATIONAL_HORIZONTAL_AXIS = 2;
+    public static final int ROTATIONAL_HORIZONTAL_AXIS = 4;
     public static final double CONTROLLER_SENSITIVITY = 0.1; // The value from the center of an axis to where it is, after which the code will actually run for the rotaters
     public static final int DRIVESWITCHBUTTON = 9; // Check this
     public static final int INTAKE_BUTTON = 3;

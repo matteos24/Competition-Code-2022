@@ -25,7 +25,7 @@ public class SwerveSpinners extends SubsystemBase {
   public static final double WHEEL_DIAMETER_INCHES = 4;
   // It may be more logical to use no SPEED MULTIPLIER and rather just depend on the controller input(investigate)
   // public static final double ROTTRANSCUT = 0;
-  public static final double SPEED_MULTIPLIER = 1/(Math.sqrt(2));
+  public static final double SPEED_MULTIPLIER = 0.7;
   public static final double ROTATION_COEFFICIENT = 0.35;
   private WPI_TalonFX bRMotor, bLMotor, fRMotor, fLMotor;
   private SpeedControllerGroup bR, bL, fR, fL;

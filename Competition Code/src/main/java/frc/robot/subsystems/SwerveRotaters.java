@@ -19,7 +19,7 @@ public class SwerveRotaters extends SubsystemBase {
   /** These are the variables that are created for this subsytem.. */
   private WPI_TalonFX fRRotater, fLRotater, bLRotater, bRRotater;
   public final double ENCODER_PULSES_PER_ROTATION = 2048;
-  public final double ROTATION_POW = 25;
+  public final double ROTATION_POW = 45;
   public boolean swerveSwitch;
 
   // This is the constructor where the rotater motors are created (named encoders) and are reset.
