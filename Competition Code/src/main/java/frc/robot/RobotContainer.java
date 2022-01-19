@@ -41,6 +41,7 @@ public class RobotContainer {
     //Mechanism Subs
   public final Sheeesh SHEEESH = new Sheeesh();
   public final RollerIntake ROLLERINTAKE = new RollerIntake();
+  public final Shooter YEETER = new Shooter();
 
   // BUTTONS
   public final JoystickButton modeSwitchButton = new JoystickButton(shopper, DRIVESWITCHBUTTON);

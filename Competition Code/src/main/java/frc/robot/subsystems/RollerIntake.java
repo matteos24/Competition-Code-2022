@@ -21,7 +21,11 @@ public class RollerIntake extends SubsystemBase{
      * @param speed [-1.0, 1.0]
      */
 
-    public void setSpeed(double speed){
-        rollerMotor.set(speed);
-     }
+    public void intake(){
+        rollerMotor.set(ROLLER_INTAKE_SPEED);
+    }
+
+    public void outtake(){
+        rollerMotor.set(-ROLLER_INTAKE_SPEED);
+    }
 }
