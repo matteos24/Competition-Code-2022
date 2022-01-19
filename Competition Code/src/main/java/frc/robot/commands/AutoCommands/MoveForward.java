@@ -7,12 +7,12 @@ package frc.robot.commands.AutoCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSpinners;
 
-public class MoveTo extends CommandBase {
+public class MoveForward extends CommandBase {
   SwerveSpinners swerve;
   double d;
 
   /** Creates a new moveTo. */
-  public MoveTo(SwerveSpinners swerve, double d) {
+  public MoveForward(SwerveSpinners swerve, double d) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
     this.swerve = swerve;

@@ -11,13 +11,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SwerveRotaters extends SubsystemBase {
   /** These are the variables that are created for this subsytem.. */
-  private TalonFX fRRotater, fLRotater, bLRotater, bRRotater;
+  private WPI_TalonFX fRRotater, fLRotater, bLRotater, bRRotater;
   public final double ENCODER_PULSES_PER_ROTATION = 2048;
   public final double ROTATION_POW = 25;
   public boolean swerveSwitch;
@@ -29,10 +29,10 @@ public class SwerveRotaters extends SubsystemBase {
   public SwerveRotaters() {
     swerveSwitch = false;
 
-    fRRotater = new TalonFX(ROTATOR_PORT_1);
-    fLRotater = new TalonFX(ROTATOR_PORT_2);
-    bLRotater = new TalonFX(ROTATOR_PORT_3);
-    bRRotater = new TalonFX(ROTATOR_PORT_4);
+    fRRotater = new WPI_TalonFX(ROTATOR_PORT_1);
+    fLRotater = new WPI_TalonFX(ROTATOR_PORT_2);
+    bLRotater = new WPI_TalonFX(ROTATOR_PORT_3);
+    bRRotater = new WPI_TalonFX(ROTATOR_PORT_4);
 
     //tester shit below
     // this works i hope
@@ -105,7 +105,7 @@ public class SwerveRotaters extends SubsystemBase {
   }
 
   //This function returns the position of the encoder that is provided
-  public double getPosition(TalonFX encoder){
+  public double getPosition(WPI_TalonFX encoder){
     return encoder.getSelectedSensorPosition();
   }
 
@@ -224,6 +224,18 @@ public class SwerveRotaters extends SubsystemBase {
     fLRotater.set(ControlMode.Position, fL);
     bLRotater.set(ControlMode.Position, bL);
     bRRotater.set(ControlMode.Position, bR);
+  }
+
+  public boolean reachedPosition(double a, double b, double c, double d){
+    if (checkError(fRRotater, a) && checkError(fLRotater, b) && checkError(bLRotater, c) && checkError(bRRotater, d)) {
+      return true;
+    }
+    return false;
+  }
+
+
+  private boolean checkError(WPI_TalonFX motor, double d){
+    return motor.getSelectedSensorPosition() < d + ROTATOR_ERROR_TOLERANCE && motor.getSelectedSensorPosition() > d - ROTATOR_ERROR_TOLERANCE;
   }
 
   @Override

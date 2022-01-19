@@ -13,14 +13,14 @@ public final class Constants {
 
     // SwerveDrive MOTOR Ports
   
-    public static final int MOTOR_PORT_1 = 5;
-    public static final int MOTOR_PORT_2 = 8;
-    public static final int MOTOR_PORT_3 = 3;
+    public static final int MOTOR_PORT_1 = 1;
+    public static final int MOTOR_PORT_2 = 3;
+    public static final int MOTOR_PORT_3 = 5;
     public static final int MOTOR_PORT_4 = 7; 
-    public static final int ROTATOR_PORT_1 = 4;
-    public static final int ROTATOR_PORT_2 = 2;
-    public static final int ROTATOR_PORT_3 = 1;
-    public static final int ROTATOR_PORT_4 = 6;
+    public static final int ROTATOR_PORT_1 = 2;
+    public static final int ROTATOR_PORT_2 = 4;
+    public static final int ROTATOR_PORT_3 = 6;
+    public static final int ROTATOR_PORT_4 = 8;
     //Needs calibrating
     public static final int ROLLER_INTAKE_PORT = 10;
     //Not sure if intake needs pistons or not
@@ -60,5 +60,5 @@ public final class Constants {
     public static final Gains kGains = new Gains(0.1, 0.0, 0.0, 0.0, 0, 0.0); //coamnds 
     public static final Gains jGains = new Gains(0.1,0.0,0.0,0.0,0, 0.0); // spinners
     public static final double ERROR_TOLERANCE = 25;
-
+    public static final double ROTATOR_ERROR_TOLERANCE = 25;
 }
