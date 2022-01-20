@@ -19,8 +19,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 //import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.OuttakeCommand;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 //import frc.robot.commands.*;
 //import frc.robot.triggers.*;
@@ -47,10 +46,12 @@ public class RobotContainer {
   public final JoystickButton modeSwitchButton = new JoystickButton(shopper, DRIVESWITCHBUTTON);
   public final JoystickButton intakeButton = new JoystickButton(shopper, INTAKE_BUTTON),
   outtakeButton = new JoystickButton(shopper, OUTTAKE_BUTTON);
+  public final JoystickButton shootButton = new JoystickButton(shopper, SHOOT_BUTTON);
   public final InstantCommand modeSwitchRotaters = new InstantCommand(() -> SWERVEROTATERS.toggleSwitch(), SWERVEROTATERS);
   public final InstantCommand modeSwitchTrans = new InstantCommand(()-> SWERVESPINNERS.toggleSwitch(), SWERVESPINNERS);
   public final Command intakeCommand = new IntakeCommand(ROLLERINTAKE);
   public final Command outtakeCommand = new OuttakeCommand(ROLLERINTAKE);
+  public final Command shootCommand = new ShootCommand(YEETER);
   
   
   public RobotContainer() {
@@ -89,8 +90,10 @@ public class RobotContainer {
 
     //Intake
     intakeButton.whileHeld(new IntakeCommand(ROLLERINTAKE));
-
     outtakeButton.whileHeld(new OuttakeCommand(ROLLERINTAKE));
+
+    //Shooter
+    shootButton.whenPressed(new ShootCommand(YEETER));
 
     //Switching Tank and Swerve
     modeSwitchButton.whenPressed(modeSwitchRotaters);

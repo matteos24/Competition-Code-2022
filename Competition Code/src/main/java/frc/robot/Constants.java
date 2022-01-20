@@ -48,6 +48,7 @@ public final class Constants {
     public static final int DRIVESWITCHBUTTON = 9; // Check this
     public static final int INTAKE_BUTTON = 3;
     public static final int OUTTAKE_BUTTON = 4;
+    public static final int SHOOT_BUTTON = 5;
 
     // Swervedrive Constants
     public static final double ANGLE_RANGE = 2;
