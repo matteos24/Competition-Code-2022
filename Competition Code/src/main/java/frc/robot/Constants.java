@@ -21,12 +21,20 @@ public final class Constants {
     public static final int ROTATOR_PORT_2 = 4;
     public static final int ROTATOR_PORT_3 = 6;
     public static final int ROTATOR_PORT_4 = 8;
+
+    // Intake Ports
     //Needs calibrating
     public static final int ROLLER_INTAKE_PORT = 10;
     //Not sure if intake needs pistons or not
     //public static final int INTAKE_PISTON_PORT_1 = 10;
     //public static final int INTAKE_PISTON_PORT_2 = 11;
 
+    // Shooter Ports
+    //Needs calibrating
+    public static final int SHOOTER_MOTOR_PORT_1 = 11;
+    public static final int SHOOTER_MOTOR_PORT_2 = 12;
+    public static final int SHOOTER_PISTON_PORT_1 = 9;
+    public static final int SHOOTER_PISTON_PORT_2 = 10;
 
     //Gyro
     public static final int GYRO_PORT = 9;
@@ -40,6 +48,7 @@ public final class Constants {
     public static final int DRIVESWITCHBUTTON = 9; // Check this
     public static final int INTAKE_BUTTON = 3;
     public static final int OUTTAKE_BUTTON = 4;
+    public static final int SHOOT_BUTTON = 5;
 
     // Swervedrive Constants
     public static final double ANGLE_RANGE = 2;

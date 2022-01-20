@@ -6,24 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import static frc.robot.Constants.*;
-import frc.robot.subsystems.RollerIntake;
+import frc.robot.Constants;
+import frc.robot.subsystems.Shooter;
 
-public class OuttakeCommand extends CommandBase {
-  /** Creates a new OuttakeCommand. */
-  private RollerIntake INTAKE;
-
-  public OuttakeCommand(RollerIntake intake) {
+public class ShootCommand extends CommandBase {
+  /** Creates a new ShootCommand. */
+  private Shooter SHOOTER;
+  
+  public ShootCommand(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
-    this.INTAKE = intake;
+    addRequirements(shooter);
+    this.SHOOTER = shooter;
+
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize(){
-    INTAKE.intake();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -31,9 +30,7 @@ public class OuttakeCommand extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    INTAKE.off();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
