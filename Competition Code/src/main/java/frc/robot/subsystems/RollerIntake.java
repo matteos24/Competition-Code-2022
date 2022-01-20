@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 import static frc.robot.Constants.*;
 
 public class RollerIntake extends SubsystemBase{
+    //Need to edit rollerIntake as we are not using flywheel design anymore
     private DoubleSolenoid intakePiston;
     private VictorSP rollerMotor;
 
@@ -27,5 +28,9 @@ public class RollerIntake extends SubsystemBase{
 
     public void outtake(){
         rollerMotor.set(-ROLLER_INTAKE_SPEED);
+    }
+
+    public void off(){
+        rollerMotor.set(0);
     }
 }
