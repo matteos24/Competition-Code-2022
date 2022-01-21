@@ -6,24 +6,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.Constants;
+import static frc.robot.Constants.*;
 import frc.robot.subsystems.Shooter;
 
-public class ShootCommand extends CommandBase {
-  /** Creates a new ShootCommand. */
+public class LowerCatapultCommand extends CommandBase {
+  /** Creates a new LowerCatapultCommand. */
   private Shooter SHOOTER;
-  
-  public ShootCommand(Shooter shooter) {
+  public LowerCatapultCommand(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
-    this.SHOOTER = shooter;
 
+    this.SHOOTER = shooter;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    SHOOTER.extendPistons();
+  public void initialize(){
+    SHOOTER.setSpeed(SHOOTER_PISTON_SPEED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +32,7 @@ public class ShootCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted){
-    SHOOTER.pistonsOff();
+    SHOOTER.setSpeed(0);
   }
 
   // Returns true when the command should end.
