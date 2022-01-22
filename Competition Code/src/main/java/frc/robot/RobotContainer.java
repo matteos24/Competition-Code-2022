@@ -11,6 +11,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 //import edu.wpi.first.wpilibj2.command.Command;
@@ -18,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 //import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.CatapaultCommand;
+import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import static frc.robot.Constants.*;
 
@@ -35,15 +36,20 @@ public class RobotContainer {
   public final Gyro GYRO = new Gyro();
     //Mechanism Subs
   public final Sheeesh SHEEESH = new Sheeesh();
-  public final Intake INTAKE = new Intake();
-  
-  public final Catapault CATAPAULT = new Catapault();
+  public final RollerIntake ROLLERINTAKE = new RollerIntake();
+  public final Shooter YEETER = new Shooter();
 
+  // BUTTONS
   public final JoystickButton modeSwitchButton = new JoystickButton(shopper, DRIVESWITCHBUTTON);
+  public final JoystickButton intakeButton = new JoystickButton(shopper, INTAKE_BUTTON),
+  outtakeButton = new JoystickButton(shopper, OUTTAKE_BUTTON);
+  public final JoystickButton shootButton = new JoystickButton(shopper, SHOOT_BUTTON);
   public final InstantCommand modeSwitchRotaters = new InstantCommand(() -> SWERVEROTATERS.toggleSwitch(), SWERVEROTATERS);
   public final InstantCommand modeSwitchTrans = new InstantCommand(()-> SWERVESPINNERS.toggleSwitch(), SWERVESPINNERS);
-  public final JoystickButton catapaultButton = new JoystickButton(shopper, CATAPAULT_BUTTON);
-  public CatapaultCommand catapaultCommand = new CatapaultCommand(CATAPAULT);
+  public final Command intakeCommand = new IntakeCommand(ROLLERINTAKE);
+  public final Command outtakeCommand = new OuttakeCommand(ROLLERINTAKE);
+  public final Command shootCommand = new ShootCommand(YEETER);
+  
   
   public RobotContainer() {
     // Configure the button bindings
@@ -79,8 +85,14 @@ public class RobotContainer {
         GYRO
     ));
 
-    catapaultButton.whenPressed(catapaultCommand);
+    //Intake
+    intakeButton.whileHeld(new IntakeCommand(ROLLERINTAKE));
+    outtakeButton.whileHeld(new OuttakeCommand(ROLLERINTAKE));
 
+    //Shooter
+    shootButton.whenPressed(new ShootCommand(YEETER));
+
+    //Switching Tank and Swerve
     modeSwitchButton.whenPressed(modeSwitchRotaters);
     modeSwitchButton.whenPressed(modeSwitchTrans);
   }
