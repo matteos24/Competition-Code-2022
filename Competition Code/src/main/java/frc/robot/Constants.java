@@ -61,6 +61,7 @@ public final class Constants {
     
     //Speed constants
     public static final double ROLLER_INTAKE_SPEED = 0.5;
+    public static final double SHOOTER_PISTON_SPEED = 0.5;
 
     //Swervedrive PID Stuff
     public static final int kSlotIdx = 0;
